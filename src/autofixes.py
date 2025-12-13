@@ -18,6 +18,7 @@
 
 
 import logging
+from collections.abc import Callable
 from tkinter import *
 from typing import TYPE_CHECKING
 
@@ -39,90 +40,8 @@ class AutoFixResult:
 		self.details = details
 
 
-def autofix_complex_sorter(problem_info: ProblemInfo | SimpleProblemInfo) -> AutoFixResult:
-	if isinstance(problem_info, SimpleProblemInfo):
-		return AutoFixResult(
-			success=False,
-			details="Unsupported Problem Type",
-		)
+AUTO_FIXES: dict[SolutionType, Callable[..., AutoFixResult]] = {
 
-	try:
-		ini_text, ini_encoding = read_text_encoded(problem_info.path)
-		ini_text = ini_text.replace("\r\n", "\n")
-		while "\n\n\n" in str(ini_text):
-			ini_text = ini_text.replace("\n\n", "\n")
-		ini_lines = ini_text.splitlines()
-	except FileNotFoundError:
-		logger.exception("Auto-Fix : %s : Failed", problem_info.path)
-		return AutoFixResult(
-			success=False,
-			details=f"File Not Found: {problem_info.path}",
-		)
-	except PermissionError:
-		logger.exception("Auto-Fix : %s : Failed", problem_info.path)
-		return AutoFixResult(
-			success=False,
-			details=f"File Access Denied: {problem_info.path}",
-		)
-	except OSError:
-		logger.exception("Auto-Fix : %s : Failed", problem_info.path)
-		return AutoFixResult(
-			success=False,
-			details=f"OSError: {problem_info.path}",
-		)
-
-	lines_fixed = 0
-	for i, ini_line in enumerate(ini_lines):
-		if ini_line.startswith(";"):
-			continue
-
-		if 'FindNode OBTS(FindNode "Addon Index"' in ini_line or "FindNode OBTS(FindNode 'Addon Index'" in ini_line:
-			ini_lines[i] = ini_line.replace(
-				'FindNode OBTS(FindNode "Addon Index"',
-				'FindNode OBTS(FindNode "Parent Combination Index"',
-			).replace(
-				"FindNode OBTS(FindNode 'Addon Index'",
-				"FindNode OBTS(FindNode 'Parent Combination Index'",
-			)
-			lines_fixed += 1
-			logger.info(
-				'Auto-Fix : %s : Line %s : Updated "Addon Index" to "Parent Combination Index"',
-				problem_info.path.name,
-				i + 1,
-			)
-
-	if lines_fixed:
-		try:
-			problem_info.path.write_text("\n".join(ini_lines) + "\n", ini_encoding)
-		except PermissionError:
-			logger.exception("Auto-Fix : %s : Failed", problem_info.path.name)
-			result = AutoFixResult(
-				success=False,
-				details=f"File Access Denied: {problem_info.path}",
-			)
-		except OSError:
-			logger.exception("Auto-Fix : %s : Failed", problem_info.path.name)
-			result = AutoFixResult(
-				success=False,
-				details=f"OSError: {problem_info.path}",
-			)
-		else:
-			logger.info("Auto-Fix : %s : %s Lines Fixed", problem_info.path.name, lines_fixed)
-			result = AutoFixResult(
-				success=True,
-				details=f'All references to "Addon Index" updated to "Parent Combination Index".\nINI Lines Fixed: {lines_fixed}',
-			)
-		return result
-
-	logger.error("Auto-Fix : %s : No fixes were needed.", problem_info.path.name)
-	return AutoFixResult(
-		success=True,
-		details="No fixes were needed.",
-	)
-
-
-AUTO_FIXES = {
-	SolutionType.ComplexSorterFix: autofix_complex_sorter,
 }
 
 

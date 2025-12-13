@@ -37,7 +37,6 @@ IGNORE_FOLDERS = {
 """These are always lowercase."""
 
 DATA_WHITELIST = {
-	"complex sorter": None,
 	"f4se": None,
 	"materials": {"bgem", "bgsm", "txt"},
 	"meshes": {

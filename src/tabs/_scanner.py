@@ -384,34 +384,6 @@ class ScannerTab(CMCTabFrame):
 			self.thread_scan = None
 			return
 
-		if scan_settings[ScanSetting.Errors]:  # noqa: SIM102
-			if scan_settings.manager and Tool.ComplexSorter in scan_settings.manager.executables:
-				for tool_path in scan_settings.manager.executables[Tool.ComplexSorter]:
-					for ini_path in rglob(tool_path.parent, "ini"):
-						ini_text, _ = read_text_encoded(ini_path)
-						ini_lines = ini_text.splitlines(keepends=True)
-						error_found = False
-						for ini_line in ini_lines:
-							if not ini_line.startswith(";") and (
-								'FindNode OBTS(FindNode "Addon Index"' in ini_line
-								or "FindNode OBTS(FindNode 'Addon Index'" in ini_line
-							):
-								error_found = True
-								break
-
-						if error_found:
-							problems.append(
-								ProblemInfo(
-									ProblemType.ComplexSorter,
-									ini_path,
-									ini_path.relative_to(tool_path.parent),
-									tool_path.parent.name,
-									"INI uses an outdated field name. xEdit 4.1.5g changed the name of 'Addon Index' to 'Parent Combination Index'. Using outdated INIs with xEdit 4.1.5g+ results in broken output that may crash the game.",
-									SolutionType.ComplexSorterFix,
-								),
-							)
-							continue
-
 		if scan_settings[ScanSetting.RaceSubgraphs]:
 			self.queue_progress.put("Race Subgraph Records")
 			sadd_modules: list[tuple[int, Path]] = []
@@ -571,31 +543,6 @@ class ScannerTab(CMCTabFrame):
 					continue
 
 				file_ext = file_split[1]
-
-				if scan_settings[ScanSetting.Errors]:  # noqa: SIM102
-					if data_root_lower == "complex sorter" and file_ext == "ini":
-						ini_text, _ = read_text_encoded(file_path_full)
-						ini_lines = ini_text.splitlines(keepends=True)
-						error_found = False
-						for ini_line in ini_lines:
-							if not ini_line.startswith(";") and (
-								'FindNode OBTS(FindNode "Addon Index"' in ini_line
-								or "FindNode OBTS(FindNode 'Addon Index'" in ini_line
-							):
-								error_found = True
-								break
-						if error_found:
-							problems.append(
-								ProblemInfo(
-									ProblemType.ComplexSorter,
-									mod_path_file,
-									file_path_relative,
-									mod_name_file,
-									"INI uses an outdated field name. xEdit 4.1.5g changed the name of 'Addon Index' to 'Parent Combination Index'. Using outdated INIs with xEdit 4.1.5g+ results in broken output that may crash the game.",
-									SolutionType.ComplexSorterFix,
-								),
-							)
-							continue
 
 				if scan_settings[ScanSetting.WrongFormat]:
 					if (whitelist and file_ext not in whitelist) or (
