@@ -482,7 +482,7 @@ class ScannerTab(CMCTabFrame):
 							current_path_relative,
 							mod_name,
 							"Loose previs files should be archived so they only win conflicts according to their plugin's load order.\nLoose previs files are also not supported by PJM's Previs Scripts.",
-							SolutionType.ArchiveOrDeleteFolder,
+							SolutionType.ArchiveFolder,
 						),
 					)
 					folders.clear()
@@ -509,7 +509,7 @@ class ScannerTab(CMCTabFrame):
 									folder_path_relative,
 									mod_name_folder,
 									"Loose previs files should be archived so they only win conflicts according to their plugin's load order.\nLoose previs files are also not supported by PJM's Previs Scripts.",
-									SolutionType.ArchiveOrDeleteFolder,
+									SolutionType.ArchiveFolder,
 								),
 							)
 							del folders[last_index - i]
@@ -523,7 +523,7 @@ class ScannerTab(CMCTabFrame):
 									folder_path_relative,
 									mod_name_folder,
 									"The existence of unpacked AnimTextData may cause the game to crash.",
-									SolutionType.ArchiveOrDeleteFolder,
+									SolutionType.ArchiveFolder,
 								),
 							)
 							del folders[last_index - i]

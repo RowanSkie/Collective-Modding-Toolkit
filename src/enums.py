@@ -92,7 +92,7 @@ class ProblemType(StrEnum):
 
 class SolutionType(StrEnum):
 	ArchiveOrDeleteFile = "These files should either be archived or deleted."
-	ArchiveOrDeleteFolder = "These folders should either be archived or deleted."
+	ArchiveFolder = "These folders should be packed into BA2 archives."
 	DeleteFile = "This file should be deleted."
 	# DeleteFolder = "This folder should be deleted."
 	ConvertDeleteOrIgnoreFile = "This file may need to be converted and relevant files updated for the new name.\nOtherwise it can likely be deleted or ignored."
