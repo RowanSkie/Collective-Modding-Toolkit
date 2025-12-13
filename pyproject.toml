@@ -5,7 +5,28 @@ license = "GPL-2.0-or-later"
 description = "A toolkit for troubleshooting and optimizing your mod setup for Fallout 4, purpose-built for the Collective Modding Discord Community."
 version = "0.6.0"
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "chardet",
+    "packaging",
+    "pillow",
+    "psutil",
+    "pywin32",
+    "pywin32-ctypes",
+    "pyxdelta",
+    "requests",
+    "tkinter-tooltip",
+]
+
+[dependency-groups]
+dev = [
+    "mypy",
+    "pyinstaller",
+    "setuptools",
+    "types-psutil",
+    "types-pywin32",
+    "types-requests",
+]
 
 [project.urls]
 homepage = "https://www.nexusmods.com/fallout4/mods/87907"
@@ -13,36 +34,6 @@ repository = "https://github.com/wxMichael/Collective-Modding-Toolkit"
 issues = "https://github.com/wxMichael/Collective-Modding-Toolkit/issues"
 changelog = "https://github.com/wxMichael/Collective-Modding-Toolkit/blob/main/CHANGELOG.md"
 download = "https://github.com/wxMichael/Collective-Modding-Toolkit/releases/latest/download/cm-toolkit.zip"
-
-[tool.poetry.dependencies]
-python = ">=3.12,<3.13"
-packaging = "^24.2"
-psutil = "^6.1.1"
-pywin32 = "^308"
-pywin32-ctypes = "^0.2.3"
-pyxdelta = "^0.2.0"
-requests = "^2.32.3"
-tkinter-tooltip = "^3.1.2"
-pillow = "^11.1.0"
-chardet = "^5.2.0"
-
-[tool.poetry.group.dev.dependencies]
-mypy = "^1.14.1"
-types-psutil = "^6.1.0.20241221"
-types-pywin32 = "^308.0.0.20241221"
-types-requests = "^2.32.0.20241016"
-setuptools = "^75.6.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry-pyinstaller-plugin]
-use-poetry-install = true
-include = { "src/assets" = "assets" }
-
-[tool.poetry-pyinstaller-plugin.scripts]
-cm-toolkit = { source = "src/main.py", type = "onedir", icon = "src/icon.ico", windowed = true, console = false }
 
 [tool.mypy]
 enable_incomplete_feature = ["NewGenericSyntax"]
