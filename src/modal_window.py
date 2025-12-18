@@ -19,14 +19,17 @@
 
 import operator
 from abc import ABC
-from pathlib import Path
 from tkinter import *
 from tkinter import ttk
-from typing import final
+from typing import TYPE_CHECKING, final
 
 from globals import *
-from helpers import CMCheckerInterface
 from utils import set_titlebar_style
+
+if TYPE_CHECKING:
+	from pathlib import Path
+
+	from helpers import CMCheckerInterface
 
 
 class ModalWindow(Toplevel, ABC):
@@ -62,7 +65,7 @@ class ModalWindow(Toplevel, ABC):
 		self.bind("<Escape>", self._ungrab_and_destroy)
 
 	@final
-	def _ungrab_and_destroy(self, _: "Event[Misc] | None" = None) -> None:
+	def _ungrab_and_destroy(self, _: Event[Misc] | None = None) -> None:
 		if self.processing_data:
 			return
 

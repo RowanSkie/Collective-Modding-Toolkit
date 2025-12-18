@@ -18,18 +18,17 @@
 
 
 import logging
-from collections.abc import Callable
 from tkinter import *
 from typing import TYPE_CHECKING
 
-from enums import SolutionType
 from globals import *
-from helpers import ProblemInfo, SimpleProblemInfo
 from modal_window import AboutWindow
-from utils import read_text_encoded
 
 if TYPE_CHECKING:
+	from collections.abc import Callable
+
 	import tabs
+	from enums import SolutionType
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ AUTO_FIXES: dict[SolutionType, Callable[..., AutoFixResult]] = {
 }
 
 
-def do_autofix(results_pane: "tabs.ResultDetailsPane", selection: str) -> None:
+def do_autofix(results_pane: tabs.ResultDetailsPane, selection: str) -> None:
 	if results_pane.problem_info.autofix_result is None:
 		if TYPE_CHECKING:
 			assert isinstance(results_pane.problem_info.solution, SolutionType)

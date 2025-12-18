@@ -21,11 +21,12 @@ import csv
 import sys
 from pathlib import Path
 from tkinter import *
-from typing import Literal, TypedDict
-
-from packaging.version import Version
+from typing import TYPE_CHECKING, Literal, TypedDict
 
 from enums import Tool
+
+if TYPE_CHECKING:
+	from packaging.version import Version
 
 win11_24h2 = sys.getwindowsversion().build >= 26100
 
@@ -35,7 +36,7 @@ def is_file(path: Path) -> bool:
 		return path.is_file()
 
 	try:
-		with path.open():
+		with path.open(encoding="utf-8"):
 			pass
 	except FileNotFoundError:
 		return False

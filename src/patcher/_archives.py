@@ -19,16 +19,19 @@
 
 import logging
 import stat
-from pathlib import Path
 from tkinter import *
 from tkinter import ttk
-from typing import final
+from typing import TYPE_CHECKING, final
 
 from enums import ArchiveVersion, LogType, Magic
 from globals import *
-from helpers import CMCheckerInterface
 
 from ._base import PatcherBase
+
+if TYPE_CHECKING:
+	from pathlib import Path
+
+	from helpers import CMCheckerInterface
 
 logger = logging.getLogger()
 
@@ -98,7 +101,7 @@ class ArchivePatcher(PatcherBase):
 		self.text_filter = ttk.Entry(self.frame_middle)
 		self.text_filter.grid(column=1, row=0, sticky=NSEW)
 
-		def on_key_release(event: "Event[ttk.Entry]") -> None:
+		def on_key_release(event: Event[ttk.Entry]) -> None:
 			text = event.widget.get()
 			self.name_filter = event.widget.get().casefold() if text else None
 			self.logger.clear()

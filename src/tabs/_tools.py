@@ -18,17 +18,21 @@
 
 
 import webbrowser
-from collections.abc import Callable
 from tkinter import *
 from tkinter import ttk
+from typing import TYPE_CHECKING
 
 from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
 
 from downgrader import Downgrader
 from globals import *
 from helpers import CMCheckerInterface, CMCTabFrame
-from modal_window import ModalWindow
 from patcher import ArchivePatcher
+
+if TYPE_CHECKING:
+	from collections.abc import Callable
+
+	from modal_window import ModalWindow
 
 
 class ToolsTab(CMCTabFrame):

@@ -17,14 +17,12 @@
 #
 
 
-import io
 import logging
 import os
 import struct
 import sys
 import winreg
 import zlib
-from collections.abc import Generator
 from ctypes import WinDLL, byref, c_int, create_unicode_buffer, sizeof, windll, wintypes
 from pathlib import Path
 from tkinter import *
@@ -38,10 +36,15 @@ from packaging.version import InvalidVersion, Version
 from psutil import Process
 
 import sv_ttk
-from enums import CSIDL
 from globals import APP_VERSION, COLOR_DEFAULT, FONT, FONT_SMALL, NEXUS_LINK
-from helpers import DLLInfo
 from mod_manager_info import ModManagerInfo
+
+if TYPE_CHECKING:
+	import io
+	from collections.abc import Generator
+
+	from enums import CSIDL
+	from helpers import DLLInfo
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +72,7 @@ def is_file(path: Path) -> bool:
 		return path.is_file()
 
 	try:
-		with path.open():
+		with path.open(encoding="utf-8"):
 			pass
 	except FileNotFoundError:
 		return False
@@ -103,7 +106,7 @@ def exists(path: Path) -> bool:
 
 	# Files
 	try:
-		with path.open():
+		with path.open(encoding="utf-8"):
 			return True
 	except FileNotFoundError:
 		return False
@@ -179,7 +182,7 @@ def get_asset_path(relative_path: str) -> Path:
 	return base_path / "assets" / relative_path
 
 
-def block_text_input(event: "Event[Text]") -> str | None:
+def block_text_input(event: Event[Text]) -> str | None:
 	# Block all input except CTRL+A / CTRL+C
 	if event.state == KEY_CTRL and event.keysym in "AC":
 		return None

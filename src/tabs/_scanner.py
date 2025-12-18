@@ -28,7 +28,7 @@ from tkinter import ttk
 from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
 
 from autofixes import AUTO_FIXES, do_autofix
-from enums import ProblemType, SolutionType, Tab, Tool
+from enums import ProblemType, SolutionType, Tab
 from globals import *
 from helpers import CMCheckerInterface, CMCTabFrame, ProblemInfo, SimpleProblemInfo
 from modal_window import TreeWindow
@@ -47,8 +47,6 @@ from utils import (
 	exists,
 	is_dir,
 	is_file,
-	read_text_encoded,
-	rglob,
 )
 
 
@@ -75,13 +73,13 @@ class ScannerTab(CMCTabFrame):
 		self.func_id_focus: str
 		self.func_id_config: str
 
-	def on_focus(self, _event: "Event[Misc]") -> None:
+	def on_focus(self, _event: Event[Misc]) -> None:
 		if self.side_pane:
 			self.side_pane.tkraise()
 		if self.details_pane:
 			self.details_pane.tkraise()
 
-	def on_configure(self, _event: "Event[Misc]") -> None:
+	def on_configure(self, _event: Event[Misc]) -> None:
 		if self.side_pane:
 			self.side_pane.update_geometry()
 		if self.details_pane:
@@ -290,7 +288,7 @@ class ScannerTab(CMCTabFrame):
 		self.tree_results.bind("<<TreeviewSelect>>", self.on_row_select)
 		self.tree_results.configure(selectmode=BROWSE)
 
-	def on_row_select(self, _event: "Event[ttk.Treeview]") -> bool:
+	def on_row_select(self, _event: Event[ttk.Treeview]) -> bool:
 		if not _event.widget.selection():
 			return False
 
@@ -370,8 +368,6 @@ class ScannerTab(CMCTabFrame):
 							mod_files.modules[file] = (mod_name, full_path)
 						elif file_lower.endswith(".ba2"):
 							mod_files.archives[file] = (mod_name, full_path)
-					else:
-						pass
 
 		scan_settings.mod_files = mod_files
 		return mod_files
@@ -647,12 +643,12 @@ class SidePane(Toplevel):
 		self.button_scan.configure(state=NORMAL if any(bv.get() for bv in self.bool_vars.values()) else DISABLED)
 		self.scanner_tab.cmc.root.update()
 
-	def on_focus(self, _event: "Event[Misc]") -> None:
+	def on_focus(self, _event: Event[Misc]) -> None:
 		self.scanner_tab.cmc.root.tkraise()
 		if self.scanner_tab.details_pane:
 			self.scanner_tab.details_pane.tkraise()
 
-	def update_geometry(self, _event: "Event[Misc] | None" = None) -> None:
+	def update_geometry(self, _event: Event[Misc] | None = None) -> None:
 		root_x = self.scanner_tab.cmc.root.winfo_rootx()
 		root_y = self.scanner_tab.cmc.root.winfo_rooty()
 		root_width = self.scanner_tab.cmc.root.winfo_width()
@@ -899,12 +895,12 @@ class ResultDetailsPane(Toplevel):
 			)
 			self.button_autofix.pack(side=TOP, anchor=E, fill=X, padx=5, pady=(5, 0))
 
-	def on_focus(self, _event: "Event[Misc]") -> None:
+	def on_focus(self, _event: Event[Misc]) -> None:
 		self.scanner_tab.cmc.root.tkraise()
 		if self.scanner_tab.side_pane:
 			self.scanner_tab.side_pane.tkraise()
 
-	def update_geometry(self, _event: "Event[Misc] | None" = None) -> None:
+	def update_geometry(self, _event: Event[Misc] | None = None) -> None:
 		root_x = self.scanner_tab.cmc.root.winfo_rootx()
 		root_y = self.scanner_tab.cmc.root.winfo_rooty()
 		root_width = self.scanner_tab.cmc.root.winfo_width()

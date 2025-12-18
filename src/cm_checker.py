@@ -22,11 +22,11 @@ import sys
 import webbrowser
 from tkinter import *
 from tkinter import ttk
+from typing import TYPE_CHECKING
 
 from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
 
 import tabs
-from app_settings import AppSettings
 from enums import Tab
 from game_info import GameInfo
 from globals import *
@@ -40,6 +40,9 @@ from utils import (
 	check_for_update_nexus,
 	get_asset_path,
 )
+
+if TYPE_CHECKING:
+	from app_settings import AppSettings
 
 logger = logging.getLogger(__name__)
 
@@ -179,7 +182,7 @@ class CMChecker(CMCheckerInterface):
 		update_frame.grid_columnconfigure(column, weight=1)
 		update_frame.grid_rowconfigure(0, weight=1)
 
-	def on_minimize(self, _event: "Event[Misc]") -> None:
+	def on_minimize(self, _event: Event[Misc]) -> None:
 		if self.root.wm_state() != "iconic":
 			return
 		scanner_tab = self.tabs[Tab.Scanner]
@@ -189,7 +192,7 @@ class CMChecker(CMCheckerInterface):
 			if scanner_tab.details_pane:
 				scanner_tab.details_pane.wm_state("withdrawn")
 
-	def on_restore(self, _event: "Event[Misc]") -> None:
+	def on_restore(self, _event: Event[Misc]) -> None:
 		if self.root.wm_state() != "normal":
 			return
 		scanner_tab = self.tabs[Tab.Scanner]
@@ -199,7 +202,7 @@ class CMChecker(CMCheckerInterface):
 			if scanner_tab.details_pane:
 				scanner_tab.details_pane.wm_state("normal")
 
-	def on_tab_changed(self, event: "Event[ttk.Notebook]") -> None:
+	def on_tab_changed(self, event: Event[ttk.Notebook]) -> None:
 		if self.current_tab is not None:
 			self.current_tab.switch_from()
 		new_tab_index = int(event.widget.index("current"))  # pyright: ignore[reportUnknownArgumentType]

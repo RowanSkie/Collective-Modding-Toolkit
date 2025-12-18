@@ -19,16 +19,19 @@
 
 import logging
 from abc import abstractmethod
-from pathlib import Path
 from tkinter import *
 from tkinter import ttk
-from typing import final
+from typing import TYPE_CHECKING, final
 
 from enums import LogType, Tab
 from globals import *
-from helpers import CMCheckerInterface
 from logger import Logger
 from modal_window import AboutWindow, ModalWindow
+
+if TYPE_CHECKING:
+	from pathlib import Path
+
+	from helpers import CMCheckerInterface
 
 logger = logging.getLogger()
 

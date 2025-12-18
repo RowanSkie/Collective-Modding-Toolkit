@@ -308,10 +308,10 @@ class OverviewTab(CMCTabFrame):
 			if install_type:
 				version = ver_to_str(self.cmc.game.file_info[file_name]["Version"] or "Not Found")
 
-				def on_enter(event: "Event[ttk.Label]", ver: str = version) -> None:
+				def on_enter(event: Event[ttk.Label], ver: str = version) -> None:
 					event.widget.configure(text=ver)
 
-				def on_leave(event: "Event[ttk.Label]", it: str = install_type or "Not Found") -> None:
+				def on_leave(event: Event[ttk.Label], it: str = install_type or "Not Found") -> None:
 					event.widget.configure(text=it)
 
 				version_label.bind("<Enter>", on_enter)

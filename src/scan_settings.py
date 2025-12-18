@@ -114,7 +114,7 @@ class ModFiles:
 
 
 class ScanSettings(dict[ScanSetting, bool]):
-	def __init__(self, side_pane: "SidePane") -> None:
+	def __init__(self, side_pane: SidePane) -> None:
 		super().__init__()
 
 		self.skip_data_scan = True

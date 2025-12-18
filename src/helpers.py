@@ -24,7 +24,6 @@ import sys
 import winreg
 from abc import ABC, abstractmethod
 from ctypes import windll
-from pathlib import Path
 from tkinter import *
 from tkinter import ttk
 from typing import TYPE_CHECKING, NotRequired, TypedDict, final
@@ -35,6 +34,8 @@ from enums import InstallType, ProblemType, SolutionType, Tab
 from globals import COLOR_BAD, FONT_LARGE
 
 if TYPE_CHECKING:
+	from pathlib import Path
+
 	import psutil._pswindows as pswin
 
 	from app_settings import AppSettings

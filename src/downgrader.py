@@ -25,6 +25,7 @@ from threading import Thread
 from tkinter import *
 from tkinter import ttk
 from types import MappingProxyType
+from typing import TYPE_CHECKING
 
 import pyxdelta
 import requests
@@ -32,15 +33,17 @@ from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
 
 from enums import LogType, Tab
 from globals import *
-from helpers import (
-	CMCheckerInterface,
-)
 from logger import Logger
 from modal_window import AboutWindow, ModalWindow
 from utils import (
 	get_crc32,
 	is_file,
 )
+
+if TYPE_CHECKING:
+	from helpers import (
+		CMCheckerInterface,
+	)
 
 COLOR_OG = "dodger blue"
 COLOR_NG = "SlateBlue1"
