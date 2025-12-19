@@ -17,8 +17,6 @@
 #
 
 
-from typing import NotRequired, TypedDict
-
 from enums import InstallType
 
 APP_TITLE = "Collective Modding Toolkit"
@@ -81,59 +79,55 @@ FONT_LARGE = ("Cascadia Mono", 20)
 RACE_SUBGRAPH_THRESHOLD = 100
 
 
-class BaseGameFile(TypedDict):
-	OnlyOG: NotRequired[bool]
-	UseHash: NotRequired[bool]
-	UseHashFallback: NotRequired[bool]
-	Versions: dict[str, InstallType]
-
-
-BASE_FILES: dict[str, BaseGameFile] = {
+BASE_FILES: dict[str, dict[str, InstallType]] = {
 	"Fallout4.exe": {
-		"Versions": {
-			"1.10.163.0": InstallType.OG,
-			"1.10.980.0": InstallType.NG,
-			"1.10.984.0": InstallType.NG,
-		},
+		"1.10.120.0": InstallType.Obsolete,
+		"1.10.130.0": InstallType.Obsolete,
+		"1.10.138.0": InstallType.Obsolete,
+		"1.10.162.0": InstallType.Obsolete,
+		"1.10.163.0": InstallType.OG,
+		"1.10.980.0": InstallType.Obsolete,
+		"1.10.984.0": InstallType.NG,
+		"1.11.137.0": InstallType.Obsolete,
+		"1.11.159.0": InstallType.Obsolete,
+		"1.11.169.0": InstallType.Obsolete,
+		"1.11.191.0": InstallType.AE,
 	},
 	"Fallout4Launcher.exe": {
-		"UseHash": True,
-		"Versions": {
-			"02445570": InstallType.OG,
-			"F6A06FF5": InstallType.NG,
-		},
+		"02445570": InstallType.OG,  # 1.10.120 to 1.10.163
+		"F6A06FF5": InstallType.NG,  # 1.10.980 to 1.10.984
+		"0E696744": InstallType.Obsolete,  # 1.11.137
+		"D15C6A49": InstallType.Obsolete,  # 1.11.159
+		"8C52BE93": InstallType.Obsolete,  # 1.11.169a
+		"591009C9": InstallType.Obsolete,  # 1.11.169b
+		"720BB9C3": InstallType.AE,  # 1.11.191
 	},
 	"steam_api64.dll": {
-		"UseHashFallback": True,
-		"Versions": {
-			"2.89.45.4": InstallType.OG,
-			"7.40.51.27": InstallType.NG,
-			"BD3AA35F": InstallType.OG,  # GOG
-		},
+		"2.89.45.4": InstallType.OG,  # 1.10.120 to 1.10.163
+		"7.40.51.27": InstallType.NGAE,  # 1.10.980 to 1.11.191
+		"BD3AA35F": InstallType.OG,  # GOG
 	},
 	"f4se_loader.exe": {
-		"Versions": {
-			"0.0.6.23": InstallType.OG,
-			"0.0.7.2": InstallType.NG,
-		},
+		"0.0.6.23": InstallType.OG,
+		"0.0.7.2": InstallType.NG,
+		"0.0.7.4": InstallType.Obsolete,
+		"0.0.7.5": InstallType.Obsolete,
+		"0.0.7.6": InstallType.Obsolete,
+		"0.0.7.7": InstallType.AE,
 	},
 	"f4se_steam_loader.dll": {
-		"OnlyOG": True,
-		"Versions": {
-			"0.0.6.23": InstallType.OG,
-		},
+		"0.0.6.23": InstallType.OG,
 	},
 	"CreationKit.exe": {
-		"Versions": {
-			"1.10.162.0": InstallType.OG,
-			"1.10.982.3": InstallType.NG,
-		},
+		"1.10.162.0": InstallType.OG,
+		"1.10.943.1": InstallType.Obsolete,
+		"1.10.982.3": InstallType.NG,
+		"1.11.137.0": InstallType.AE,
 	},
 	"Tools\\Archive2\\Archive2.exe": {
-		"Versions": {
-			"1.1.0.4": InstallType.OG,
-			"1.1.0.5": InstallType.NG,
-		},
+		"4CDFC7B5": InstallType.OG,
+		"71A5240B": InstallType.NG,
+		"C867674F": InstallType.AE,
 	},
 }
 

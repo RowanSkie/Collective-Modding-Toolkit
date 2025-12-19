@@ -17,6 +17,7 @@
 #
 
 
+import logging
 import os
 import sys
 import winreg
@@ -38,6 +39,9 @@ from utils import (
 if TYPE_CHECKING:
 	from helpers import FileInfo
 	from mod_manager_info import ModManagerInfo
+
+
+logger = logging.getLogger(__name__)
 
 
 class GameInfo:
@@ -81,6 +85,7 @@ class GameInfo:
 			ini_path = docs_path / name
 			if not is_file(ini_path):
 				continue
+
 			section = "NO-SECTION"
 			ini_dict = self.game_prefs if name == "Fallout4Prefs.ini" else self.game_settings
 			for line in ini_path.read_text(encoding="utf-8").splitlines():
@@ -105,12 +110,14 @@ class GameInfo:
 			self.ba2_suffixes = ("main", "textures", "voices_en", f"voices_{self.language}")
 
 	def reset_binaries(self) -> None:
+		logger.debug("Reset Info: Binaries")
 		self.install_type = InstallType.Unknown
 		self.file_info.clear()
 		self.address_library = None
 		self.ckfixes_found = False
 
 	def reset_modules(self) -> None:
+		logger.debug("Reset Info: Modules")
 		self.module_count_full = 0
 		self.module_count_light = 0
 		self.module_count_v1 = 0
@@ -120,6 +127,7 @@ class GameInfo:
 		self.modules_unreadable.clear()
 
 	def reset_archives(self) -> None:
+		logger.debug("Reset Info: Archives")
 		self.ba2_count_gnrl = 0
 		self.ba2_count_dx10 = 0
 		self.archives_gnrl.clear()
@@ -271,6 +279,12 @@ class GameInfo:
 
 	def is_fong(self) -> bool:
 		return self._install_type == InstallType.NG
+
+	def is_foae(self) -> bool:
+		return self._install_type == InstallType.AE
+
+	def is_ngae(self) -> bool:
+		return self._install_type in {InstallType.NG, InstallType.AE}
 
 	def is_fodg(self) -> bool:
 		return self._install_type == InstallType.DG

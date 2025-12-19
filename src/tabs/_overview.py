@@ -32,7 +32,7 @@ from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
 from downgrader import Downgrader
 from enums import CSIDL, ArchiveVersion, Magic, ModuleFlag, ProblemType, SolutionType
 from globals import *
-from helpers import CMCheckerInterface, CMCTabFrame, ProblemInfo, SimpleProblemInfo
+from helpers import CMCheckerInterface, CMCTabFrame, FileInfo, ProblemInfo, SimpleProblemInfo
 from modal_window import AboutWindow, TreeWindow
 from patcher import ArchivePatcher
 from utils import (
@@ -234,7 +234,7 @@ class OverviewTab(CMCTabFrame):
 
 		label_address_library = ttk.Label(
 			self.frame_info_binaries,
-			text="Not Found" if not self.cmc.game.address_library else "Next-Gen" if self.cmc.game.is_fong() else "Old-Gen",
+			text="Installed" if self.cmc.game.address_library else "Not Found",
 			font=FONT,
 			foreground=COLOR_GOOD if self.cmc.game.address_library else COLOR_BAD,
 		)
@@ -265,9 +265,9 @@ class OverviewTab(CMCTabFrame):
 							),
 						)
 
-				case None:
-					if file_name.lower() in {"creationkit.exe", "archive2.exe"} or (
-						self.cmc.game.is_fong() and BASE_FILES[file_name].get("OnlyOG", False)
+				case InstallType.NotFound:
+					if file_name in {"CreationKit.exe", "Tools\\Archive2\\Archive2.exe"} or (
+						self.cmc.game.is_ngae() and file_name == "f4se_steam_loader.dll"
 					):
 						color = COLOR_NEUTRAL_1
 					else:
@@ -302,7 +302,7 @@ class OverviewTab(CMCTabFrame):
 				text=install_type or "Not Found",
 				font=FONT,
 				foreground=color,
-				width=10,
+				width=11,
 			)
 			version_label.grid(column=1, row=i, sticky=W)
 			if install_type:
@@ -602,6 +602,40 @@ class OverviewTab(CMCTabFrame):
 			padx=(5, 0),
 		)
 
+	def get_file_info(self, file_name: str, file_path: Path) -> FileInfo:
+		file_path = self.cmc.game.game_path / file_name
+		logger.debug("Get File Info: %s", file_path)
+
+		if not is_file(file_path):
+			return {
+				"File": None,
+				"Version": None,
+				"VersionString": None,
+				"Hash": None,
+				"InstallType": InstallType.NotFound,
+			}
+
+		version = get_file_version(file_path)
+		file_hash = get_crc32(file_path)
+
+		if version:
+			version_string = ver_to_str(version)
+			install_type = BASE_FILES[file_name].get(version_string) or BASE_FILES[file_name].get(file_hash)
+		else:
+			version_string = file_hash
+			install_type = BASE_FILES[file_name].get(file_hash)
+
+		if install_type == InstallType.NGAE and self.cmc.game.install_type in {InstallType.NG, InstallType.AE}:
+			install_type = self.cmc.game.install_type
+
+		return {
+			"File": file_path,
+			"Version": version,
+			"VersionString": version_string,
+			"Hash": file_hash,
+			"InstallType": install_type or InstallType.Unknown,
+		}
+
 	def get_info_binaries(self) -> None:
 		logger.debug("Gathering Info: Binaries")
 		self.cmc.game.reset_binaries()
@@ -617,44 +651,26 @@ class OverviewTab(CMCTabFrame):
 			)
 
 		for file_name in BASE_FILES:
+
 			file_path = self.cmc.game.game_path / file_name
-			if not is_file(file_path):
-				self.cmc.game.file_info[file_path.name] = {
-					"File": None,
-					"Version": None,
-					"InstallType": None,
-				}
-				continue
+			file_info = self.get_file_info(file_name, file_path)
+			self.cmc.game.file_info[file_path.name] = file_info
 
-			if BASE_FILES[file_name].get("UseHash", False):
-				version = get_crc32(file_path)
-			else:
-				ver = get_file_version(file_path)
-				if ver is None and BASE_FILES[file_name].get("UseHashFallback", False):
-					version = get_crc32(file_path)
-				else:
-					version = ver_to_str(ver) if ver else "NO VERSION"
+			if file_name == "Fallout4.exe":
+				self.cmc.game.install_type = file_info["InstallType"]
 
-			self.cmc.game.file_info[file_path.name] = {
-				"File": file_path,
-				"Version": version,
-				"InstallType": BASE_FILES[file_name]["Versions"].get(version, InstallType.Unknown),
-			}
-
-			if file_path.name.lower() == "fallout4.exe":
-				self.cmc.game.install_type = self.cmc.game.file_info[file_path.name]["InstallType"] or InstallType.Unknown
 				if self.cmc.game.install_type == InstallType.Unknown:
 					self.cmc.overview_problems.append(
 						SimpleProblemInfo(
-							file_path.name,
+							"Fallout4.exe",
 							"Unknown Game Version",
-							f"{version} is an unknown version.\nPossible causes:\n1. The game is an old version and should be updated.\n2. The exe file may be corrupted.\n3. The game is a new version and the Toolkit needs to be updated.",
+							f"{file_info['VersionString'] or file_info['Hash']} is an unknown version.\nPossible causes:\n1. The game is an old version and should be updated.\n2. The exe file may be corrupted.\n3. The game is a new version and the Toolkit needs to be updated.",
 							"Either update the game/verify files in Steam, or report this issue.",
 						),
 					)
 
-				if self.cmc.game.data_path:
-					address_library_name = f"version-{version.replace('.', '-')}.bin"
+				if self.cmc.game.data_path and file_info["VersionString"]:
+					address_library_name = f"version-{file_info['VersionString'].replace('.', '-')}.bin"
 					relative_path = Path("F4SE/Plugins", address_library_name)
 					address_library_path = self.cmc.game.data_path / relative_path
 					if is_file(address_library_path):
@@ -696,6 +712,7 @@ class OverviewTab(CMCTabFrame):
 		self.cmc.game.reset_archives()
 
 		if self.cmc.game.data_path is None:
+			logger.debug("Archives: No Data Path")
 			# Reported to Scanner in get_info_modules.
 			return
 
@@ -740,6 +757,8 @@ class OverviewTab(CMCTabFrame):
 				)
 
 		for ba2_file in self.cmc.game.archives_enabled:
+			logger.debug("Archives: Checking %s", ba2_file.name)
+
 			try:
 				with ba2_file.open("rb") as f:
 					head = f.read(12)
@@ -796,11 +815,9 @@ class OverviewTab(CMCTabFrame):
 			match head[8:]:
 				case Magic.GNRL:
 					self.cmc.game.ba2_count_gnrl += 1
-					# self.cmc.game.archives_gnrl.add(ba2_file)
 
 				case Magic.DX10:
 					self.cmc.game.ba2_count_dx10 += 1
-					# self.cmc.game.archives_dx10.add(ba2_file)
 
 				case _:
 					self.cmc.game.archives_unreadable.add(ba2_file)

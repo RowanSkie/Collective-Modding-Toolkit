@@ -55,37 +55,47 @@ class Downgrader(ModalWindow):
 		"Fallout4.exe": {
 			"C6053902": InstallType.OG,
 			"C5965A2E": InstallType.NG,
+			"CF47788D": InstallType.AE,
 		},
 		"Fallout4Launcher.exe": {
 			"02445570": InstallType.OG,
-			"F6A06FF5": InstallType.NG,
+			"720BB9C3": InstallType.NG,
+			"F6A06FF5": InstallType.AE,
 		},
 		"steam_api64.dll": {
 			"BBD912FC": InstallType.OG,
-			"E36E7B4D": InstallType.NG,
+			"E36E7B4D": InstallType.NGAE,
 		},
 	})
 	CRCs_ck = MappingProxyType({
 		"CreationKit.exe": {
 			"0F5C065B": InstallType.OG,
 			"481CCE95": InstallType.NG,
+			"49E45284": InstallType.AE,
 		},
 		"Tools\\Archive2\\Archive2.exe": {
 			"4CDFC7B5": InstallType.OG,
 			"71A5240B": InstallType.NG,
+			"C867674F": InstallType.AE,
 		},
 		"Tools\\Archive2\\Archive2Interop.dll": {
 			"850D36A9": InstallType.OG,
 			"EFBE3622": InstallType.NG,
+			"7B893B0D": InstallType.AE,
 		},
 	})
 	CRCs_by_type: MappingProxyType[InstallType, list[str]] = MappingProxyType({
 		InstallType.OG: [],
 		InstallType.NG: [],
+		InstallType.AE: [],
 	})
 	for CRCs in list(CRCs_game.values()) + list(CRCs_ck.values()):
 		for crc, install_type in CRCs.items():
-			CRCs_by_type[install_type].append(crc)
+			if install_type == InstallType.NGAE:
+				CRCs_by_type[InstallType.NG].append(crc)
+				CRCs_by_type[InstallType.AE].append(crc)
+			else:
+				CRCs_by_type[install_type].append(crc)
 
 	def __init__(self, parent: Wm, cmc: CMCheckerInterface) -> None:
 		super().__init__(parent, cmc, "Downgrader", 600, 334)

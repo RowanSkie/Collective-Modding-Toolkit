@@ -218,8 +218,10 @@ class CMCTabFrame(ttk.Frame, ABC):
 
 class FileInfo(TypedDict):
 	File: Path | None
-	Version: tuple[int, int, int, int] | str | None
-	InstallType: InstallType | None
+	Version: tuple[int, int, int, int] | None
+	VersionString: str | None
+	Hash: str | None
+	InstallType: InstallType
 
 
 class DLLInfo(TypedDict):
@@ -273,6 +275,7 @@ class SimpleProblemInfo:
 		self.file_list = file_list
 		self.extra_data = extra_data
 		self.autofix_result: AutoFixResult | None = None
+		logger.debug("Added SimpleProblemInfo: Path: %s | Problem: %s", path, problem)
 
 
 class StdErr:
