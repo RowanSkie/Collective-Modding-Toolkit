@@ -223,7 +223,7 @@ def parse_dll(file_path: Path) -> DLLInfo | None:
 	try:
 		dll = WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
 		dll_info: DLLInfo = {
-			"IsF4SE": hasattr(dll, "F4SEPlugin_Load"),
+			"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
 			"SupportsOG": hasattr(dll, "F4SEPlugin_Query"),
 			"SupportsNG": hasattr(dll, "F4SEPlugin_Version"),
 		}
