@@ -227,7 +227,7 @@ class FileInfo(TypedDict):
 class DLLInfo(TypedDict):
 	IsF4SE: bool
 	SupportsOG: NotRequired[bool]
-	SupportsNG: NotRequired[bool]
+	SupportsNGAE: NotRequired[bool]
 
 
 class ProblemInfo:

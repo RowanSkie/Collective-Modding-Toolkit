@@ -280,10 +280,13 @@ class GameInfo:
 	def is_fong(self) -> bool:
 		return self._install_type == InstallType.NG
 
+	def is_foogng(self) -> bool:
+		return self._install_type in {InstallType.OG, InstallType.DG, InstallType.NG}
+
 	def is_foae(self) -> bool:
 		return self._install_type == InstallType.AE
 
-	def is_ngae(self) -> bool:
+	def is_fongae(self) -> bool:
 		return self._install_type in {InstallType.NG, InstallType.AE}
 
 	def is_fodg(self) -> bool:

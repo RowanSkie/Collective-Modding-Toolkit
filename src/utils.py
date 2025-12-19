@@ -225,7 +225,7 @@ def parse_dll(file_path: Path) -> DLLInfo | None:
 		dll_info: DLLInfo = {
 			"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
 			"SupportsOG": hasattr(dll, "F4SEPlugin_Query"),
-			"SupportsNG": hasattr(dll, "F4SEPlugin_Version"),
+			"SupportsNGAE": hasattr(dll, "F4SEPlugin_Version"),
 		}
 	except OSError:
 		return None
