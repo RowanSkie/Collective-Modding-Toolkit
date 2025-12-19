@@ -130,11 +130,6 @@ class ToolsTab(CMCTabFrame):
 					"An automation tool used to optimize BSAs, meshes, textures and animations.",
 				),
 				(
-					"Unpackrr",
-					"https://www.nexusmods.com/fallout4/mods/82082",
-					"Batch unpacks small BA2 files to stay below the limit.",
-				),
-				(
 					"BA2 Merging Automation\n     Tool (BMAT)",
 					"https://www.nexusmods.com/fallout4/mods/89306",
 					"Automated BA2 files repackaging and merging.",
