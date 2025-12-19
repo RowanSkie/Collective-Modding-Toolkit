@@ -806,7 +806,7 @@ class ResultDetailsPane(Toplevel):
 
 		if self.problem_info.extra_data:
 			extra = "\n".join(self.problem_info.extra_data)
-			self.sv_solution.set((self.problem_info.solution or "Solution not found.") + f"\n{extra}")
+			self.sv_solution.set((self.problem_info.solution or "No solution suggestion.") + f"\n{extra}")
 			url = self.problem_info.extra_data[0]
 
 			if url.startswith("http"):
@@ -825,7 +825,7 @@ class ResultDetailsPane(Toplevel):
 					self.tooltip_solution.destroy()
 					self.tooltip_solution = None
 		else:
-			self.sv_solution.set(self.problem_info.solution or "Solution not found.")
+			self.sv_solution.set(self.problem_info.solution or "No solution suggestion.")
 			self.label_solution.unbind("<Button-1>")
 			self.label_solution.unbind("<Button-3>")
 			if self.tooltip_solution:
