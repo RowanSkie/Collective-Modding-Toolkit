@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.6.0] - 2025-12-19
+
+### Added
+
+- Initial support for Anniversary Edition.  
+  Downgrading is still only supported for Old-Gen/Next-Gen.
+  F4SE DLLs are too similar between Next-Gen and Anniversary Edition to distinguish with the current method.
+
+### Fixed
+
+- Downgrader should no longer remove files when used on unsupported versions (e.g. steam_api64.dll for GOG)
+
+### Removed
+
+- #### Scanner
+
+  - Complex Sorter INI Errors: Removed as it was rendered ineffective by later xEdit updates.
+
 ## [0.5.2] - 2025-01-13
 
 *This is the final Python version. No release was published for v0.5.2.*
