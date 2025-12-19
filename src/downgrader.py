@@ -47,20 +47,34 @@ if TYPE_CHECKING:
 
 COLOR_OG = "dodger blue"
 COLOR_NG = "SlateBlue1"
+COLOR_AE = "salmon"
 PATCH_URL_BASE = "https://github.com/wxMichael/Collective-Modding-Toolkit/releases/download/delta-patches/"
 
 
 class Downgrader(ModalWindow):
 	CRCs_game = MappingProxyType({
 		"Fallout4.exe": {
-			"C6053902": InstallType.OG,
-			"C5965A2E": InstallType.NG,
-			"CF47788D": InstallType.AE,
+			"97DA3E03": InstallType.Obsolete,  # 1.10.120
+			"2ED2A242": InstallType.Obsolete,  # 1.10.130
+			"A0100017": InstallType.Obsolete,  # 1.10.138
+			"9ABC94F0": InstallType.Obsolete,  # 1.10.162
+			"C6053902": InstallType.OG,  # 1.10.163
+			"B61675B1": InstallType.Obsolete,  # 1.10.980
+			"C5965A2E": InstallType.NG,  # 1.10.984
+			"0AEB19A7": InstallType.Obsolete,  # 1.11.137
+			"1E90BE57": InstallType.Obsolete,  # 1.11.159
+			"0481725D": InstallType.Obsolete,  # 1.11.169a
+			"0E176ABC": InstallType.Obsolete,  # 1.11.169b
+			"CF47788D": InstallType.AE,  # 1.11.191
 		},
 		"Fallout4Launcher.exe": {
-			"02445570": InstallType.OG,
-			"720BB9C3": InstallType.NG,
-			"F6A06FF5": InstallType.AE,
+			"02445570": InstallType.OG,  # 1.10.120 to 1.10.163
+			"F6A06FF5": InstallType.NG,  # 1.10.980 to 1.10.984
+			"0E696744": InstallType.Obsolete,  # 1.11.137
+			"D15C6A49": InstallType.Obsolete,  # 1.11.159
+			"8C52BE93": InstallType.Obsolete,  # 1.11.169a
+			"591009C9": InstallType.Obsolete,  # 1.11.169b
+			"720BB9C3": InstallType.AE,  # 1.11.191
 		},
 		"steam_api64.dll": {
 			"BBD912FC": InstallType.OG,
@@ -85,6 +99,7 @@ class Downgrader(ModalWindow):
 		},
 	})
 	CRCs_by_type: MappingProxyType[InstallType, list[str]] = MappingProxyType({
+		InstallType.Obsolete: [],
 		InstallType.OG: [],
 		InstallType.NG: [],
 		InstallType.AE: [],
@@ -224,18 +239,31 @@ class Downgrader(ModalWindow):
 				frame = self.frame_ck
 				i = 0
 
-			if install_type == InstallType.NG:
+			install_type_string = install_type
+
+			if install_type == InstallType.AE:
+				color = COLOR_AE
+			elif install_type == InstallType.NGAE:
+				if self.cmc.game.is_foae():
+					color = COLOR_AE
+					install_type_string = InstallType.AE
+				elif self.cmc.game.is_fong():
+					color = COLOR_NG
+					install_type_string = InstallType.NG
+				else:
+					color = COLOR_BAD
+			elif install_type == InstallType.NG:
 				color = COLOR_NG
 			elif install_type == InstallType.NotFound:
 				color = COLOR_NEUTRAL_1
-			elif install_type == InstallType.Unknown:
+			elif install_type in {InstallType.Unknown, InstallType.Obsolete}:
 				color = COLOR_BAD
 			else:
 				color = COLOR_OG
 
 			label = ttk.Label(
 				frame,
-				text=install_type,
+				text=install_type_string,
 				font=FONT,
 				foreground=color,
 				justify=RIGHT,
@@ -261,20 +289,25 @@ class Downgrader(ModalWindow):
 
 		desired_version = InstallType.OG if self.bv_wants_downgrade.get() else InstallType.NG
 
-		patch_needed = False
 		for file_name, install_type in self.current_versions.items():
+			patch_needed = False
 			file_path = self.cmc.game.game_path / file_name
 
 			match install_type:
 				case desired_version.value:
-					self.logger.log_message(
-						LogType.Info,
-						f"Skipped {file_path.name}: Already {desired_version}.",
-					)
+					self.logger.log_message(LogType.Info, f"Skipped {file_path.name}: Already {desired_version}.")
 					continue
 
 				case InstallType.NotFound:
 					self.logger.log_message(LogType.Info, f"Skipped {file_path.name}: Not Found.")
+					continue
+
+				case InstallType.AE:
+					self.logger.log_message(LogType.Info, f"Skipped {file_path.name}: Unsupported Version.")
+					continue
+
+				case InstallType.Obsolete:
+					self.logger.log_message(LogType.Info, f"Skipped {file_path.name}: Unsupported Version.")
 					continue
 
 				case _:
@@ -288,11 +321,21 @@ class Downgrader(ModalWindow):
 		backup_name_og = f"{file_path.stem}_upgradeBackup{file_path.suffix}"
 		backup_name_ng = f"{file_path.stem}_downgradeBackup{file_path.suffix}"
 
+		current_crc = get_crc32(file_path)
+
 		if desired_version == InstallType.OG:
+			if current_crc not in self.CRCs_by_type[InstallType.NG]:
+				self.logger.log_message(LogType.Info, f"Skipped {file_path.name}: Unsupported Version.")
+				return
+
 			patch_direction = "NG-to-OG-"
 			backup_file_name_desired = backup_name_og
 			backup_file_name_current = backup_name_ng
 		else:
+			if current_crc not in self.CRCs_by_type[InstallType.OG]:
+				self.logger.log_message(LogType.Info, f"Skipped {file_path.name}: Unsupported Version.")
+				return
+
 			patch_direction = "OG-to-NG-"
 			backup_file_name_desired = backup_name_ng
 			backup_file_name_current = backup_name_og
@@ -303,6 +346,7 @@ class Downgrader(ModalWindow):
 		try:
 			if file_path.stat().st_file_attributes & stat.FILE_ATTRIBUTE_READONLY:
 				file_path.chmod(stat.S_IWRITE)
+
 			if is_file(backup_file_path_current):
 				print("Backup of current version exists.")
 				if get_crc32(backup_file_path_current) == get_crc32(file_path):
