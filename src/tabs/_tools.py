@@ -158,11 +158,3 @@ class ToolsTab(CMCTabFrame):
 			frame_column.grid(column=i, row=0, sticky=NSEW, padx=5, pady=5)
 			for button in buttons:
 				self.add_tool_button(frame_column, *button)  # type: ignore[reportArgumentType]
-
-		frame_toolkit = next(w for w in self.children.values() if isinstance(w, ttk.Labelframe))
-		label_planned = ttk.Label(frame_toolkit, text="Planned Tools:", font=FONT_SMALL)
-		label_planned.grid(column=0, row=len(frame_toolkit.children) - 1, pady=(10, 0))
-
-		self.add_tool_button(frame_toolkit, "File Inspector")
-		self.add_tool_button(frame_toolkit, "Move CC to\nMod Manager")
-		self.add_tool_button(frame_toolkit, "Papyrus Script\n   Compiler")
