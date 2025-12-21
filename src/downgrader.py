@@ -289,6 +289,7 @@ class Downgrader(ModalWindow):
 
 		desired_version = InstallType.OG if self.bv_wants_downgrade.get() else InstallType.NG
 
+		patch_needed = False
 		for file_name, install_type in self.current_versions.items():
 			patch_needed = False
 			file_path = self.cmc.game.game_path / file_name
