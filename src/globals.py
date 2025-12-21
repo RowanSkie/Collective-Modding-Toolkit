@@ -230,10 +230,9 @@ other DLLs.
 \N{WARNING SIGN} Consult mod page to
 verify version support if
 you see this icon.
-Some DLLs detected as OG+NG
-only actually support both
-enough to tell users if
-they have the wrong DLL."""
+Some DLLs' version support
+cannot be reliably
+determined."""
 
 TOOLTIP_NO_MOD_MANAGER = "Your mod manager must launch the app to be detected."
 TOOLTIP_GAME_PATH = "Click to open folder"
@@ -246,7 +245,7 @@ TOOLTIP_BA2_FORMATS = """General/GNRL/Main: Used for all non-texture files.
 Hard limit of 256, after which the game will crash at the main menu.
 
 Texture/DX10: Used only for textures.
-No hard limit, but functional limit is 256, after which the game fails
+No hard limit, but functional limit is 255, after which the game fails
 to use correct textures."""
 TOOLTIP_UNREADABLE = "Files that could not be read due to permissions, unexpected format, or corruption."
 TOOLTIP_BA2_VERSIONS = """v1 works with all FO4 versions.
