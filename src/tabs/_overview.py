@@ -266,7 +266,7 @@ class OverviewTab(CMCTabFrame):
 						)
 
 				case InstallType.NotFound:
-					if file_name in {"CreationKit.exe", "Tools\\Archive2\\Archive2.exe"} or (
+					if file_name in {"CreationKit.exe", "Archive2.exe"} or (
 						self.cmc.game.is_fongae() and file_name == "f4se_steam_loader.dll"
 					):
 						color = COLOR_NEUTRAL_1
