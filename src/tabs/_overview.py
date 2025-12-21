@@ -751,7 +751,21 @@ class OverviewTab(CMCTabFrame):
 					SimpleProblemInfo(
 						"Fallout4 - Nvflex.ba2",
 						ProblemType.FileNotFound,
-						"Nvidia Flex is enabled in your game INIs (bNVFlexEnable=1) but the Nvflex BA2 is missing.",
+						"Nvidia Flex is enabled in your game INIs (bNVFlexEnable=1) but the Nvflex BA2 is missing.\nThe exe is hardcoded to load this BA2.",
+						SolutionType.VerifyFiles,
+					),
+				)
+
+		if self.cmc.game.install_type == InstallType.AE:
+			ae_ba2_path = self.cmc.game.data_path / "Fallout4 - TexturesPatch.ba2"
+			if is_file(ae_ba2_path):
+				self.cmc.game.archives_enabled.add(ae_ba2_path)
+			else:
+				self.cmc.overview_problems.append(
+					SimpleProblemInfo(
+						"Fallout4 - TexturesPatch.ba2",
+						ProblemType.FileNotFound,
+						"Your game is Anniversary Edition but the TexturesPatch BA2 is missing.\nThe exe is hardcoded to load this BA2.",
 						SolutionType.VerifyFiles,
 					),
 				)

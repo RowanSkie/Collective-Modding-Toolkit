@@ -165,6 +165,7 @@ ARCHIVE_NAME_WHITELIST = (
 	"fallout4 - textures7.ba2",
 	"fallout4 - textures8.ba2",
 	"fallout4 - textures9.ba2",
+	"fallout4 - texturespatch.ba2",
 	"fallout4 - voices.ba2",
 	"dlcultrahighresolution - textures01.ba2",
 	"dlcultrahighresolution - textures02.ba2",
