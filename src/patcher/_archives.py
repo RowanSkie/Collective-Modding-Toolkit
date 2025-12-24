@@ -129,9 +129,13 @@ class ArchivePatcher(PatcherBase):
 
 		for ba2_file in files_to_patch:
 			try:
-				if ba2_file.stat().st_file_attributes & stat.FILE_ATTRIBUTE_READONLY:
-					ba2_file.chmod(stat.S_IWRITE)
-					logger.info("Removed read-only flag: %s", ba2_file.name)
+				# Read-only check disabled due to MO2/Windows 11 incompatibility
+				# https://github.com/ModOrganizer2/modorganizer/issues/2174
+				#
+				# if ba2_file.stat().st_file_attributes & stat.FILE_ATTRIBUTE_READONLY:
+				# 	ba2_file.chmod(stat.S_IWRITE)
+				# 	self.logger.log_message(LogType.Info, f"Removed read-only flag: {ba2_file.name}")
+
 				with ba2_file.open("r+b") as f:
 					if f.read(4) != Magic.BTDX:
 						self.logger.log_message(LogType.Bad, f"Unrecognized format: {ba2_file.name}")
