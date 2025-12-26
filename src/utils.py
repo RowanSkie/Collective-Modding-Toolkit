@@ -17,17 +17,18 @@
 #
 
 
+import ctypes
 import logging
 import os
 import struct
 import sys
 import winreg
 import zlib
-from ctypes import WinDLL, byref, c_int, create_unicode_buffer, sizeof, windll, wintypes
+from ctypes import POINTER, WinDLL, byref, c_int, create_unicode_buffer, sizeof, windll, wintypes
 from pathlib import Path
 from tkinter import *
 from tkinter import ttk
-from typing import TYPE_CHECKING, Literal, overload
+from typing import TYPE_CHECKING, ClassVar, Literal, overload
 
 import chardet
 import requests
@@ -41,7 +42,8 @@ from mod_manager_info import ModManagerInfo
 
 if TYPE_CHECKING:
 	import io
-	from collections.abc import Generator
+	from collections.abc import Generator, Sequence
+	from ctypes import _CDataType  # pyright: ignore[reportPrivateUsage] # noqa: PLC2701
 
 	from enums import CSIDL
 	from helpers import DLLInfo
@@ -54,6 +56,22 @@ KEY_CTRL = 12
 
 win11_24h2 = sys.getwindowsversion().build >= 26100
 
+type Fields = Sequence[tuple[str, type[_CDataType]] | tuple[str, type[_CDataType], int]]
+
+class F4SEPluginVersionData(ctypes.Structure):
+	_fields_: ClassVar[Fields] = [
+		("dataVersion", ctypes.c_uint32),
+		("pluginVersion", ctypes.c_uint32),
+		("name", ctypes.c_char * 256),
+		("author", ctypes.c_char * 256),
+		("addressIndependence", ctypes.c_uint32),
+		("structureIndependence", ctypes.c_uint32),
+		("compatibleVersions", ctypes.c_uint32 * 16),
+		("seVersionRequired", ctypes.c_uint32),
+		("reservedNonBreaking", ctypes.c_uint32),
+		("reservedBreaking", ctypes.c_uint32),
+		("reserved", ctypes.c_uint8 * 512),
+	]
 
 def rglob(path: Path, ext: str) -> Generator[Path]:
 	if not win11_24h2:
@@ -219,16 +237,28 @@ def get_crc32(file_path: Path, chunk_size: int = 65536, max_chunks: int | None =
 	return f"{checksum:08X}"
 
 
-def parse_dll(file_path: Path) -> DLLInfo | None:
-	try:
-		dll = WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
-		dll_info: DLLInfo = {
-			"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
-			"SupportsOG": hasattr(dll, "F4SEPlugin_Query"),
-			"SupportsNGAE": hasattr(dll, "F4SEPlugin_Version"),
-		}
-	except OSError:
-		return None
+def parse_dll(file_path: Path) -> DLLInfo:
+	dll = WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
+	dll_info: DLLInfo = {
+		"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
+		"SupportsOG": hasattr(dll, "F4SEPlugin_Query"),
+		"SupportsNGAE": hasattr(dll, "F4SEPlugin_Version"),
+		"SupportsNG": None,
+		"SupportsAE": None,
+	}
+
+	if dll_info["SupportsNGAE"]:
+		sym = ctypes.cast(
+			dll.F4SEPlugin_Version,
+			POINTER(F4SEPluginVersionData),
+		)
+		v = sym.contents
+		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
+			dll_info["SupportsNG"] = True
+
+		if any(n > 0x010B0890 for n in v.compatibleVersions):
+			dll_info["SupportsAE"] = True
+
 	return dll_info
 
 

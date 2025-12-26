@@ -26,7 +26,7 @@ from abc import ABC, abstractmethod
 from ctypes import windll
 from tkinter import *
 from tkinter import ttk
-from typing import TYPE_CHECKING, NotRequired, TypedDict, final
+from typing import TYPE_CHECKING, TypedDict, final
 
 import psutil
 
@@ -227,8 +227,10 @@ class FileInfo(TypedDict):
 
 class DLLInfo(TypedDict):
 	IsF4SE: bool
-	SupportsOG: NotRequired[bool]
-	SupportsNGAE: NotRequired[bool]
+	SupportsOG: bool
+	SupportsNGAE: bool
+	SupportsNG: bool | None
+	SupportsAE: bool | None
 
 
 class ProblemInfo:

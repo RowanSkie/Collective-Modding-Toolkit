@@ -23,9 +23,7 @@ from tkinter import ttk
 
 from globals import *
 from helpers import CMCheckerInterface, CMCTabFrame, DLLInfo
-from utils import (
-	parse_dll,
-)
+from utils import parse_dll
 
 TAG_NEUTRAL = "neutral"
 TAG_GOOD = "good"
@@ -36,29 +34,8 @@ EMOJI_DLL_UNKNOWN = "\N{BLACK QUESTION MARK ORNAMENT}"
 EMOJI_DLL_GOOD = "\N{HEAVY CHECK MARK}"
 EMOJI_DLL_BAD = ""
 EMOJI_DLL_NOTE = "\N{WARNING SIGN}"
-DLL_OGNG_WHITELIST = (
-	"AchievementsModsEnablerLoader.dll",
-	"BetterConsole.dll",
-	"Buffout4.dll",
-	"ClockWidget.dll",
-	"FloatingDamage.dll",
-	"GCBugFix.dll",
-	"HUDPlusPlus.dll",
-	"IndirectFire.dll",
-	"MinimalMinimap.dll",
-	"MoonRotationFix.dll",
-	"mute_on_focus_loss.dll",
-	"SprintStutteringFix.dll",
-	"UnlimitedFastTravel.dll",
-	"WeaponDebrisCrashFix.dll",
-	"x-cell-fo4.dll",
-)
-
-DLL_NGAE_WHITELIST = (
-)
 
 logger = logging.getLogger(__name__)
-
 
 class F4SETab(CMCTabFrame):
 	def __init__(self, cmc: CMCheckerInterface, notebook: ttk.Notebook) -> None:
@@ -92,15 +69,17 @@ class F4SETab(CMCTabFrame):
 		self.grid_rowconfigure(0, weight=0)
 		self.grid_rowconfigure(1, weight=1)
 
-		tree_dlls = ttk.Treeview(self, columns=("og", "ngae", "user"))
+		tree_dlls = ttk.Treeview(self, columns=("og", "ng", "ae", "user"))
 		tree_dlls.heading("#0", text="DLL")
 		tree_dlls.heading("og", text="OG")
-		tree_dlls.heading("ngae", text="NG/AE")
+		tree_dlls.heading("ng", text="NG")
+		tree_dlls.heading("ae", text="AE")
 		tree_dlls.heading("user", text="Your Game")
 
-		tree_dlls.column("#0", width=300, stretch=False, anchor=E)
+		tree_dlls.column("#0", width=240, stretch=False, anchor=E)
 		tree_dlls.column("og", width=60, stretch=False, anchor=CENTER)
-		tree_dlls.column("ngae", width=60, stretch=False, anchor=CENTER)
+		tree_dlls.column("ng", width=60, stretch=False, anchor=CENTER)
+		tree_dlls.column("ae", width=60, stretch=False, anchor=CENTER)
 		tree_dlls.column("user", width=80, stretch=False, anchor=CENTER)
 
 		tree_dlls.tag_configure(TAG_NEUTRAL, foreground=COLOR_NEUTRAL_1)
@@ -152,22 +131,31 @@ class F4SETab(CMCTabFrame):
 				values = [EMOJI_DLL_UNKNOWN] * 3
 			else:
 				og = EMOJI_DLL_GOOD if info.get("SupportsOG") else EMOJI_DLL_BAD
-				ngae = EMOJI_DLL_GOOD if info.get("SupportsNGAE") else EMOJI_DLL_BAD
-				cg = (
-					EMOJI_DLL_NOTE
-					if (info.get("SupportsOG") and info.get("SupportsNGAE"))
-					else EMOJI_DLL_GOOD
-					if (self.cmc.game.is_foog() and info.get("SupportsOG"))
-					or (self.cmc.game.is_fongae() and info.get("SupportsNGAE"))
-					else "\N{CROSS MARK}"
-				)
-				if cg == EMOJI_DLL_NOTE and (
-					(self.cmc.game.is_foogng() and dll in DLL_OGNG_WHITELIST)
-					or (self.cmc.game.is_fongae() and dll in DLL_NGAE_WHITELIST)
-				):
-					cg = EMOJI_DLL_GOOD
 
-				values = [og, ngae, cg]
+				supports_ngae = info.get("SupportsNGAE")
+				supports_ng = info.get("SupportsNG")
+				supports_ae = info.get("SupportsAE")
+
+				if supports_ngae:
+					ng = EMOJI_DLL_NOTE if supports_ng is None else EMOJI_DLL_GOOD if supports_ng else EMOJI_DLL_BAD
+					ae = EMOJI_DLL_NOTE if supports_ae is None else EMOJI_DLL_GOOD if supports_ae else EMOJI_DLL_BAD
+
+				else:
+					ng = EMOJI_DLL_BAD
+					ae = EMOJI_DLL_BAD
+					# cg = EMOJI_DLL_GOOD if self.cmc.game.is_foog() else EMOJI_DLL_BAD
+
+				cg = "\N{CROSS MARK}"
+				if self.cmc.game.is_foae():
+					cg = EMOJI_DLL_GOOD if supports_ae else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
+
+				elif self.cmc.game.is_foog():
+					cg = EMOJI_DLL_GOOD if info.get("SupportsOG") else "\N{CROSS MARK}"
+
+				elif self.cmc.game.is_fong():
+					cg = EMOJI_DLL_GOOD if supports_ng else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
+
+				values = [og, ng, ae, cg]
 				tag = TAG_NOTE if cg == EMOJI_DLL_NOTE else TAG_GOOD if cg == EMOJI_DLL_GOOD else TAG_BAD
 
 			tree_dlls.insert("", END, text=dll, values=values, tags=tag)
