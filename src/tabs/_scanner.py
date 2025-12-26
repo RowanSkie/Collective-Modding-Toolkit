@@ -542,7 +542,7 @@ class ScannerTab(CMCTabFrame):
 
 				if scan_settings[ScanSetting.WrongFormat]:
 					if (whitelist and file_ext not in whitelist) or (
-						file_ext == "dll" and str(current_path_relative).lower() != "f4se\\plugins"
+						file_ext == "dll" and not str(current_path_relative).lower().startswith("f4se\\plugins")
 					):
 						solution = None
 						if file_ext in PROPER_FORMATS:
