@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.1] - 2025-12-26
+
+### Added
+
+- Detection for AE's Fallout4 - TexturesPatch.ba2
+
+### Changed
+
+- Better game version detection for F4SE DLLs, with columns for OG, NG, and AE.
+  It should now be accurate for AE, but more testing is needed.
+
+### Fixed
+
+- Archive Patcher should no longer get File Not Found errors when using MO2 & Windows 11 24H2+
+
 ## [0.6.0] - 2025-12-19
 
 ### Added
