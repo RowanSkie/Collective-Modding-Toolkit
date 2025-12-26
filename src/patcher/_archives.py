@@ -18,7 +18,8 @@
 
 
 import logging
-import stat
+
+# import stat
 from tkinter import *
 from tkinter import ttk
 from typing import TYPE_CHECKING, final
