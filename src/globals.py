@@ -26,6 +26,8 @@ MAX_MODULES_FULL = 254
 MAX_MODULES_LIGHT = 4096
 MAX_ARCHIVES_GNRL = 256
 MAX_ARCHIVES_DX10 = 255
+MAX_ARCHIVES_GNRL_AE = 1024
+MAX_ARCHIVES_DX10_AE = 1023
 
 COLOR_DEFAULT = "#CACACA"
 COLOR_GOOD = "green2"
@@ -92,8 +94,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.11.159.0": InstallType.Obsolete,
 		"1.11.169.0": InstallType.Obsolete,
 		"1.11.191.0": InstallType.Obsolete,
-		"1.11.221.0": InstallType.AE,
-		# "1.11.240.0": InstallType.AE, (remind me to update soon enough)
+		"1.11.221.0": InstallType.Obsolete,
+		"1.11.240.0": InstallType.AE,
 	},
 	"Fallout4Launcher.exe": {
 		"02445570": InstallType.OG,  # 1.10.120 to 1.10.163
@@ -103,7 +105,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"8C52BE93": InstallType.Obsolete,  # 1.11.169a
 		"591009C9": InstallType.Obsolete,  # 1.11.169b
 		"720BB9C3": InstallType.Obsolete,  # 1.11.191
-		"CA61EDD7": InstallType.AE,  # 1.11.221
+		"CA61EDD7": InstallType.Obsolete,  # 1.11.221
+		"57D1C794": InstallType.AE,  # 1.11.240
 	},
 	"steam_api64.dll": {
 		"2.89.45.4": InstallType.OG,  # 1.10.120 to 1.10.163
@@ -117,7 +120,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"0.0.7.5": InstallType.Obsolete,
 		"0.0.7.6": InstallType.Obsolete,
 		"0.0.7.7": InstallType.Obsolete,
-		"0.0.7.8": InstallType.AE,
+		"0.0.7.8": InstallType.Obsolete,
+		"0.0.7.9": InstallType.AE,
 	},
 	"f4se_steam_loader.dll": {
 		"0.0.6.23": InstallType.OG,
@@ -126,12 +130,14 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.10.162.0": InstallType.OG,
 		"1.10.943.1": InstallType.Obsolete,
 		"1.10.982.3": InstallType.NG,
-		"1.11.137.0": InstallType.AE,
+		"1.11.137.0": InstallType.Obsolete,
+		"1.11.240.0": InstallType.AE,
 	},
 	"Tools\\Archive2\\Archive2.exe": {
 		"4CDFC7B5": InstallType.OG,
 		"71A5240B": InstallType.NG,
-		"C867674F": InstallType.AE,
+		"C867674F": InstallType.Obsolete,
+		"9A059211": InstallType.AE,
 	},
 }
 
