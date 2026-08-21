@@ -1,75 +1,237 @@
 {
-	"[python]": {
-		"editor.defaultFormatter": "charliermarsh.ruff",
-	},
-	"files.exclude": {
-		".coverage": true,
-		".git/": true,
-		".vscode/": false,
-		"**/__pycache__/": true,
-		"**/.mypy_cache/": true,
-		"**/.pytest_cache/": true,
-		"**/*.exe": true,
-		"**/*.lock": true,
-		"**/lcov.info": true,
-		"build/": true,
-		"dist/": true,
-		"sources/": true,
-		"src/assets/": true,
-		"src/icon.ico": true,
-	},
-	"python.testing.autoTestDiscoverOnSaveEnabled": true,
-	"python.testing.cwd": "${workspaceFolder}",
-	"python.testing.pytestEnabled": true,
-	"python.testing.unittestEnabled": false,
-	"[markdown]": {
-		"files.trimTrailingWhitespace": false,
-	},
-	"todo-tree.tree.scanMode": "workspace only",
-	"todo-tree.general.tags": [
-		"BUG:",
-		"HACK:",
-		"TODO:",
-		"GUI:",
-		"F4SE:",
-		"Scanner:",
-		"Overview:",
-		"Errors:",
-		"Conflicts:",
-		"Suggestions:",
-		"Tools:",
-		"Settings:",
-		"About:",
-	],
-	"todo-tree.highlights.useColourScheme": true,
-	"todo-tree.highlights.foregroundColourScheme": [
-		"Black",	// BUG:
-		"Black",	// HACK:
-		"Black",	// TODO:
-		"White",	// GUI:
-		"White",	// F4SE:
-		"White",	// Scanner:
-		"White",	// Overview:
-		"White",	// Errors:
-		"White",	// Conflicts:
-		"Sienna",	// Suggestions:
-		"Thistle",	// Tools:
-		"Black",	// Settings:
-		"Purple",	// About:
-	],
-	"todo-tree.highlights.backgroundColourScheme": [
-		"White",	// BUG:
-		"White",	// HACK:
-		"White",	// TODO:
-		"DodgerBlue",// GUI:
-		"Green",	// F4SE:
-		"Maroon",	// Scanner:
-		"Teal",		// Overview:
-		"Red",		// Errors:
-		"OrangeRed",// Conflicts:
-		"Gold",		// Suggestions:
-		"Indigo",	// Tools:
-		"PeachPuff",// Settings:
-		"Orchid",	// About:
-	],
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "files.exclude": {
+    ".coverage": true,
+    ".git/": true,
+    ".vscode/": false,
+    "**/__pycache__/": true,
+    "**/.mypy_cache/": true,
+    "**/.pytest_cache/": true,
+    "**/*.exe": true,
+    "**/*.lock": true,
+    "**/lcov.info": true,
+    "build/": true,
+    "dist/": true,
+    "sources/": true,
+    "src/assets/": true,
+    "src/icon.ico": true
+  },
+  "python.testing.autoTestDiscoverOnSaveEnabled": true,
+  "python.testing.cwd": "${workspaceFolder}",
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "todo-tree.tree.scanMode": "workspace only",
+  "todo-tree.general.tags": [
+    "BUG:",
+    "HACK:",
+    "TODO:",
+    "GUI:",
+    "F4SE:",
+    "Scanner:",
+    "Overview:",
+    "Errors:",
+    "Conflicts:",
+    "Suggestions:",
+    "Tools:",
+    "Settings:",
+    "About:"
+  ],
+  "todo-tree.highlights.useColourScheme": true,
+  "todo-tree.highlights.foregroundColourScheme": [
+    "Black", // BUG:
+    "Black", // HACK:
+    "Black", // TODO:
+    "White", // GUI:
+    "White", // F4SE:
+    "White", // Scanner:
+    "White", // Overview:
+    "White", // Errors:
+    "White", // Conflicts:
+    "Sienna", // Suggestions:
+    "Thistle", // Tools:
+    "Black", // Settings:
+    "Purple" // About:
+  ],
+  "todo-tree.highlights.backgroundColourScheme": [
+    "White", // BUG:
+    "White", // HACK:
+    "White", // TODO:
+    "DodgerBlue", // GUI:
+    "Green", // F4SE:
+    "Maroon", // Scanner:
+    "Teal", // Overview:
+    "Red", // Errors:
+    "OrangeRed", // Conflicts:
+    "Gold", // Suggestions:
+    "Indigo", // Tools:
+    "PeachPuff", // Settings:
+    "Orchid" // About:
+  ],
+  "json.schemas": [
+    {
+      "fileMatch": ["**/assets/**/blocktypes/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/blocktypes.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/characterclasses.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/characterclasses.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/colormaps.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/colormaps.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/general.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/general.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/handbook/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/handbook.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/lore/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/lore.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/remaps.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/remaps.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/traderaccessories.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/traderaccessories.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/traits.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/traits.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/weather.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/weather.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/weatherevents/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/weatherevents.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/weatherpatterns/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/weatherpatterns.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/config/windpatterns/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/config/windpatterns.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/dialog/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/dialog.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/entities/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/entities.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/itemtypes/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/itemtypes.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/lang/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/lang.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/patches/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/patches.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/recipes/alloy/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/recipes/alloy.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/recipes/barrel/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/recipes/barrel.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/recipes/clayforming/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/recipes/clayforming.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/recipes/grid/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/recipes/grid.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/recipes/knapping/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/recipes/knapping.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/recipes/smithing/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/recipes/smithing.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/blocklayers.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/blocklayers.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/blockpatches.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/blockpatches.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/deposits.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/deposits.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/deposits.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/deposits.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/geologicprovinces.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/geologicprovinces.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/global.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/global.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/landforms.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/landforms.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/layers.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/layers.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/rockstrata.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/rockstrata.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/schematics/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/schematics.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/structures.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/structures.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/treegen/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/treegen.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/treengenproperties.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/treengenproperties.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/villages.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/villages.json"
+    },
+    {
+      "fileMatch": ["**/assets/**/worldgen/worldproperties/**"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/game/worldgen/worldproperties.json"
+    },
+    {
+      "fileMatch": ["**/modinfo.json", "**/assets/**/modinfo.json"],
+      "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/modinfo.json"
+    }
+  ]
 }

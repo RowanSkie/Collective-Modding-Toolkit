@@ -20,7 +20,7 @@
 from enums import InstallType
 
 APP_TITLE = "Collective Modding Toolkit"
-APP_VERSION = "0.6.1"
+APP_VERSION = "0.6.2-dev"
 
 MAX_MODULES_FULL = 254
 MAX_MODULES_LIGHT = 4096
@@ -91,7 +91,9 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.11.137.0": InstallType.Obsolete,
 		"1.11.159.0": InstallType.Obsolete,
 		"1.11.169.0": InstallType.Obsolete,
-		"1.11.191.0": InstallType.AE,
+		"1.11.191.0": InstallType.Obsolete,
+		"1.11.221.0": InstallType.AE,
+		# "1.11.240.0": InstallType.AE, (remind me to update soon enough)
 	},
 	"Fallout4Launcher.exe": {
 		"02445570": InstallType.OG,  # 1.10.120 to 1.10.163
@@ -100,7 +102,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"D15C6A49": InstallType.Obsolete,  # 1.11.159
 		"8C52BE93": InstallType.Obsolete,  # 1.11.169a
 		"591009C9": InstallType.Obsolete,  # 1.11.169b
-		"720BB9C3": InstallType.AE,  # 1.11.191
+		"720BB9C3": InstallType.Obsolete,  # 1.11.191
+		"CA61EDD7": InstallType.AE,  # 1.11.221
 	},
 	"steam_api64.dll": {
 		"2.89.45.4": InstallType.OG,  # 1.10.120 to 1.10.163
@@ -113,7 +116,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"0.0.7.4": InstallType.Obsolete,
 		"0.0.7.5": InstallType.Obsolete,
 		"0.0.7.6": InstallType.Obsolete,
-		"0.0.7.7": InstallType.AE,
+		"0.0.7.7": InstallType.Obsolete,
+		"0.0.7.8": InstallType.AE,
 	},
 	"f4se_steam_loader.dll": {
 		"0.0.6.23": InstallType.OG,
