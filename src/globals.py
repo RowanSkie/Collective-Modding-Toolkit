@@ -94,8 +94,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.11.159.0": InstallType.Obsolete,
 		"1.11.169.0": InstallType.Obsolete,
 		"1.11.191.0": InstallType.Obsolete,
-		"1.11.221.0": InstallType.Obsolete,
-		"1.11.240.0": InstallType.AE,
+		"1.11.221.0": InstallType.AE,
+		"1.11.240.0": InstallType.AE2,
 	},
 	"Fallout4Launcher.exe": {
 		"02445570": InstallType.OG,  # 1.10.120 to 1.10.163
@@ -105,8 +105,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"8C52BE93": InstallType.Obsolete,  # 1.11.169a
 		"591009C9": InstallType.Obsolete,  # 1.11.169b
 		"720BB9C3": InstallType.Obsolete,  # 1.11.191
-		"CA61EDD7": InstallType.Obsolete,  # 1.11.221
-		"57D1C794": InstallType.AE,  # 1.11.240
+		"CA61EDD7": InstallType.AE,  # 1.11.221
+		"57D1C794": InstallType.AE2,  # 1.11.240
 	},
 	"steam_api64.dll": {
 		"2.89.45.4": InstallType.OG,  # 1.10.120 to 1.10.163
@@ -120,8 +120,8 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"0.0.7.5": InstallType.Obsolete,
 		"0.0.7.6": InstallType.Obsolete,
 		"0.0.7.7": InstallType.Obsolete,
-		"0.0.7.8": InstallType.Obsolete,
-		"0.0.7.9": InstallType.AE,
+		"0.0.7.8": InstallType.AE,
+		"0.0.7.9": InstallType.AE2,
 	},
 	"f4se_steam_loader.dll": {
 		"0.0.6.23": InstallType.OG,
@@ -130,14 +130,14 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.10.162.0": InstallType.OG,
 		"1.10.943.1": InstallType.Obsolete,
 		"1.10.982.3": InstallType.NG,
-		"1.11.137.0": InstallType.Obsolete,
-		"1.11.240.0": InstallType.AE,
+		"1.11.137.0": InstallType.AE,
+		"1.11.240.0": InstallType.AE2,
 	},
 	"Tools\\Archive2\\Archive2.exe": {
 		"4CDFC7B5": InstallType.OG,
 		"71A5240B": InstallType.NG,
-		"C867674F": InstallType.Obsolete,
-		"9A059211": InstallType.AE,
+		"C867674F": InstallType.AE,
+		"9A059211": InstallType.AE2,
 	},
 }
 
@@ -256,7 +256,8 @@ Hard limit of 256, after which the game will crash at the main menu.
 
 Texture/DX10: Used only for textures.
 No hard limit, but functional limit is 255, after which the game fails
-to use correct textures."""
+to use correct textures.
+1.11.240 has increased this limit to 1024."""
 TOOLTIP_UNREADABLE = "Files that could not be read due to permissions, unexpected format, or corruption."
 TOOLTIP_BA2_VERSIONS = """v1 works with all FO4 versions.
 v7/v8 require either BASS or NG.
@@ -328,33 +329,33 @@ These xdelta files are only needed during the patching process.
 Check this to delete xdeltas after patching."""
 
 F4SE_CRC = {
-	"actor.pex": ("C250936E", "AE6222BE"),
-	"actorbase.pex": ("0681E1F5", "FB9BCDAB"),
-	"armor.pex": ("C145D146", "3F9E535A"),
-	"armoraddon.pex": ("B0D1B057", "4F62262C"),
-	"cell.pex": ("0CB47BBE", "29F5583B"),
-	"component.pex": ("EE3B04A6", "CF50DEA9"),
-	"constructibleobject.pex": ("9CDD93BE", "55489CE6"),
-	"defaultobject.pex": ("9DF10D4B", "D173AE18"),
-	"encounterzone.pex": ("4EC6CE1F", "A70D8729"),
-	"equipslot.pex": ("3ECC3CA5", "73A59F70"),
-	"f4se.pex": ("6EEEE7D9", "13E2A430"),
-	"favoritesmanager.pex": ("AC1694B2", "4933B1C6"),
-	"form.pex": ("57919410", "06E8A822"),
-	"game.pex": ("2B0602CC", "BCF2E430"),
-	"headpart.pex": ("8DC03678", "F6E4A814"),
-	"input.pex": ("92399489", "D5FC1734"),
-	"instancedata.pex": ("73F0FBBC", "C1F7FA69"),
-	"location.pex": ("D35726C4", "F2E89378"),
-	"matswap.pex": ("49F6C1D2", "CC2D9B50"),
-	"math.pex": ("8D97F9D2", "35F956BD"),
-	"miscobject.pex": ("A6DE1C41", "C4EA2902"),
-	"objectmod.pex": ("9161CD93", "97601F72"),
-	"objectreference.pex": ("AD399939", "64FC714E"),
-	"perk.pex": ("F7D88CCC", "D596624D"),
-	"scriptobject.pex": ("E3AF8EC9", "68F24E0F"),
-	"ui.pex": ("00286C67", "749CC3DA"),
-	"utility.pex": ("5FDFAB76", "9B902650"),
-	"watertype.pex": ("6543E221", "946E310A"),
-	"weapon.pex": ("E1E3A63C", "BCA3FD37"),
+	"actor.pex": ("C250936E", "AE6222BE", "72388175"),
+	"actorbase.pex": ("0681E1F5", "FB9BCDAB", "8206385D"),
+	"armor.pex": ("C145D146", "3F9E535A", "06FC8AB2"),
+	"armoraddon.pex": ("B0D1B057", "4F62262C", "8453CB43"),
+	"cell.pex": ("0CB47BBE", "29F5583B", "043B5F5A"),
+	"component.pex": ("EE3B04A6", "CF50DEA9", "6A1A2D87"),
+	"constructibleobject.pex": ("9CDD93BE", "55489CE6", "3C9B9628"),
+	"defaultobject.pex": ("9DF10D4B", "D173AE18", "AD23389A"),
+	"encounterzone.pex": ("4EC6CE1F", "A70D8729", "6C1C70D5"),
+	"equipslot.pex": ("3ECC3CA5", "73A59F70", "33DEE9AF"),
+	"f4se.pex": ("6EEEE7D9", "13E2A430", "C3FC9A6E"),
+	"favoritesmanager.pex": ("AC1694B2", "4933B1C6", "0D6CA970"),
+	"form.pex": ("57919410", "06E8A822", "FF43CA3E"),
+	"game.pex": ("2B0602CC", "BCF2E430", "8876EE5C"),
+	"headpart.pex": ("8DC03678", "F6E4A814", "8F5714E9"),
+	"input.pex": ("92399489", "D5FC1734", "BA2FF626"),
+	"instancedata.pex": ("73F0FBBC", "C1F7FA69", "5AB4C774"),
+	"location.pex": ("D35726C4", "F2E89378", "427B459D"),
+	"math.pex": ("8D97F9D2", "35F956BD", "05DEB0F0"),
+	"matswap.pex": ("49F6C1D2", "CC2D9B50", "B6E8FA13"),
+	"miscobject.pex": ("A6DE1C41", "C4EA2902", "C672A908"),
+	"objectmod.pex": ("9161CD93", "97601F72", "D58CA42E"),
+	"objectreference.pex": ("AD399939", "64FC714E", "4F79982B"),
+	"perk.pex": ("F7D88CCC", "D596624D", "432D9EB4"),
+	"scriptobject.pex": ("E3AF8EC9", "68F24E0F", "41228361"),
+	"ui.pex": ("00286C67", "749CC3DA", "BBF99EC3"),
+	"utility.pex": ("5FDFAB76", "9B902650", "4FA68A14"),
+	"watertype.pex": ("6543E221", "946E310A", "11400876"),
+	"weapon.pex": ("E1E3A63C", "BCA3FD37", "996B1034"),
 }

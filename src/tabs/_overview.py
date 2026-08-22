@@ -390,9 +390,14 @@ class OverviewTab(CMCTabFrame):
 		).grid(column=1, row=6, sticky=E, padx=(5, 0))
 
 		# Column 2
+		if self.cmc.game.install_type == InstallType.AE2:
+			results = f" / {MAX_ARCHIVES_GNRL_AE}\n / {MAX_ARCHIVES_DX10_AE}\n / {MAX_ARCHIVES_GNRL_AE + MAX_ARCHIVES_DX10_AE}"
+		else:
+			results = f" / {MAX_ARCHIVES_GNRL}\n / {MAX_ARCHIVES_DX10}\n / {MAX_ARCHIVES_GNRL + MAX_ARCHIVES_DX10}"
+
 		label_archives_max = ttk.Label(
 			self.frame_info_archives,
-			text=f" / {MAX_ARCHIVES_GNRL}\n / {MAX_ARCHIVES_DX10}\n / {MAX_ARCHIVES_GNRL + MAX_ARCHIVES_DX10}",
+			text=results,
 			font=FONT,
 			foreground=COLOR_DEFAULT,
 		)
@@ -543,11 +548,11 @@ class OverviewTab(CMCTabFrame):
 			case "GNRL":
 				num = self.cmc.game.ba2_count_gnrl
 				# num = len(self.cmc.game.archives_gnrl)
-				limit = MAX_ARCHIVES_GNRL
+				limit = MAX_ARCHIVES_GNRL_AE if self.cmc.game.install_type == InstallType.AE2 else MAX_ARCHIVES_GNRL
 			case "DX10":
 				num = self.cmc.game.ba2_count_dx10
 				# num = len(self.cmc.game.archives_dx10)
-				limit = MAX_ARCHIVES_DX10
+				limit = MAX_ARCHIVES_DX10_AE if self.cmc.game.install_type == InstallType.AE2 else MAX_ARCHIVES_DX10
 			case "Full":
 				num = self.cmc.game.module_count_full
 				limit = MAX_MODULES_FULL
@@ -557,7 +562,11 @@ class OverviewTab(CMCTabFrame):
 			case "TotalBA2s":
 				num = self.cmc.game.ba2_count_gnrl + self.cmc.game.ba2_count_dx10
 				# num = len(self.cmc.game.archives_gnrl) + len(self.cmc.game.archives_dx10)
-				limit = MAX_ARCHIVES_GNRL + MAX_ARCHIVES_DX10
+				limit = (
+					MAX_ARCHIVES_GNRL_AE + MAX_ARCHIVES_DX10_AE
+					if self.cmc.game.install_type == InstallType.AE2
+					else MAX_ARCHIVES_GNRL + MAX_ARCHIVES_DX10
+				)
 			case "TotalModules":
 				num = self.cmc.game.module_count_full + self.cmc.game.module_count_light
 				limit = MAX_MODULES_FULL + MAX_MODULES_LIGHT
@@ -625,7 +634,7 @@ class OverviewTab(CMCTabFrame):
 			version_string = file_hash
 			install_type = BASE_FILES[file_name].get(file_hash)
 
-		if install_type == InstallType.NGAE and self.cmc.game.install_type in {InstallType.NG, InstallType.AE}:
+		if install_type == InstallType.NGAE and self.cmc.game.install_type in {InstallType.NG, InstallType.AE, InstallType.AE2}:
 			install_type = self.cmc.game.install_type
 
 		return {
@@ -651,7 +660,6 @@ class OverviewTab(CMCTabFrame):
 			)
 
 		for file_name in BASE_FILES:
-
 			file_path = self.cmc.game.game_path / file_name
 			file_info = self.get_file_info(file_name, file_path)
 			self.cmc.game.file_info[file_path.name] = file_info
@@ -756,7 +764,7 @@ class OverviewTab(CMCTabFrame):
 					),
 				)
 
-		if self.cmc.game.install_type == InstallType.AE:
+		if self.cmc.game.install_type == InstallType.AE or self.cmc.game.install_type == InstallType.AE2:
 			ae_ba2_path = self.cmc.game.data_path / "Fallout4 - TexturesPatch.ba2"
 			if is_file(ae_ba2_path):
 				self.cmc.game.archives_enabled.add(ae_ba2_path)
@@ -776,7 +784,7 @@ class OverviewTab(CMCTabFrame):
 			try:
 				with ba2_file.open("rb") as f:
 					head = f.read(12)
-			except (PermissionError, FileNotFoundError):
+			except PermissionError, FileNotFoundError:
 				self.cmc.game.archives_unreadable.add(ba2_file)
 				self.cmc.overview_problems.append(
 					ProblemInfo(
@@ -893,7 +901,7 @@ class OverviewTab(CMCTabFrame):
 		plugins_path = get_environment_path(CSIDL.AppDataLocal) / "Fallout4\\plugins.txt"
 		try:
 			plugins_content = plugins_path.read_text("utf-8")
-		except (PermissionError, FileNotFoundError):
+		except PermissionError, FileNotFoundError:
 			self.cmc.overview_problems.append(
 				SimpleProblemInfo(
 					plugins_path.name,
@@ -922,7 +930,7 @@ class OverviewTab(CMCTabFrame):
 			try:
 				with module_path.open("rb") as f:
 					head = f.read(34)
-			except (PermissionError, FileNotFoundError):
+			except PermissionError, FileNotFoundError:
 				self.cmc.game.modules_unreadable.add(module_path)
 				self.cmc.overview_problems.append(
 					ProblemInfo(
