@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
+# Copyright (C) 2024, 2025  wxMichael
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -255,10 +255,10 @@ def parse_dll(file_path: Path) -> DLLInfo:
 			POINTER(F4SEPluginVersionData),
 		)
 		v = sym.contents
-		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
+		if F4SE_RUNTIME_NG in v.compatibleVersions:
 			dll_info["SupportsNG"] = True
 
-		if any(n > 0x010B0890 for n in v.compatibleVersions):
+		if F4SE_RUNTIME_AE in v.compatibleVersions:
 			dll_info["SupportsAE"] = True
 
 	return dll_info

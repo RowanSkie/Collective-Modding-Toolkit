@@ -80,6 +80,9 @@ FONT_LARGE = ("Cascadia Mono", 20)
 
 RACE_SUBGRAPH_THRESHOLD = 100
 
+F4SE_RUNTIME_OG = 0x010A0A30
+F4SE_RUNTIME_NG = {0x010A0A30, 0x010A3D80}
+F4SE_RUNTIME_AE = 0x010B0F00
 
 BASE_FILES: dict[str, dict[str, InstallType]] = {
 	"Fallout4.exe": {
