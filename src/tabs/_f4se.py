@@ -134,19 +134,13 @@ class F4SETab(CMCTabFrame):
 				tag = TAG_NEUTRAL
 				values = [EMOJI_DLL_UNKNOWN] * 3
 			else:
+				og = EMOJI_DLL_GOOD if info.get("SupportsOG") else EMOJI_DLL_BAD
+
 				supports_ngae = info.get("SupportsNGAE")
 				supports_ng = info.get("SupportsNG")
 				supports_ae = info.get("SupportsAE")
 				is_addrindependent = info.get("AddrIndependent")
 				is_structindependent = info.get("StructIndependent")
-
-				og = (
-					EMOJI_DLL_INDIE
-					if (info.get("AddrIndependent") or info.get("StructIndependent")) and info.get("SupportsOG")
-					else EMOJI_DLL_GOOD
-					if info.get("SupportsOG")
-					else EMOJI_DLL_BAD
-				)
 
 				if supports_ngae:
 					ng = (
