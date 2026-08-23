@@ -30,14 +30,14 @@ MAX_ARCHIVES_GNRL_AE = 1024
 MAX_ARCHIVES_DX10_AE = 1023
 
 COLOR_DEFAULT = "#CACACA"
-COLOR_GOOD = "green2"
-COLOR_BAD = "firebrick1"
+COLOR_GOOD = "#619267"
+COLOR_BAD = "#AF5A66"
 COLOR_INFO = "dodger blue"
 COLOR_NEUTRAL_1 = "gray"
 COLOR_NEUTRAL_2 = "bisque"
 COLOR_WARNING = "orange"
 COLOR_NOTE = "#C5C464"
-COLOR_INDIE = "#4583BC"
+COLOR_INDIE = "#4b92da"
 
 NEXUS_LINK = "https://www.nexusmods.com/fallout4/mods/87907"
 DISCORD_INVITE = "https://discord.gg/tktyEyYHZH"
