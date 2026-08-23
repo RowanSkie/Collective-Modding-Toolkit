@@ -37,6 +37,7 @@ COLOR_NEUTRAL_1 = "gray"
 COLOR_NEUTRAL_2 = "bisque"
 COLOR_WARNING = "orange"
 COLOR_NOTE = "yellow"
+COLOR_INDIE = "cyan"
 
 NEXUS_LINK = "https://www.nexusmods.com/fallout4/mods/87907"
 DISCORD_INVITE = "https://discord.gg/tktyEyYHZH"
@@ -195,6 +196,14 @@ ARCHIVE_NAME_WHITELIST = (
 	"dlcultrahighresolution - textures16.ba2",
 )
 
+ADDIND_SIG = 0b001
+ADDIND_NG = 0b010
+ADDIND_AE = 0b100
+
+STRIND_NST = 0b001
+STRIND_NG = 0b010
+STRIND_AE = 0b100
+
 ABOUT_ARCHIVES_TITLE = "Bethesda Archive (BA2) Formats & Versions"
 ABOUT_ARCHIVES = """There are 2 formats and 3 versions for Fallout 4 BA2 files:
 • General (GNRL)
@@ -231,7 +240,7 @@ determine OG/NG support.
 
 \N{HEAVY CHECK MARK} Version is supported
 
-\N{CROSS MARK} Version not supported
+\N{HEAVY ASTERISK} DLL uses Address Library
 
 \N{BLACK QUESTION MARK ORNAMENT} Not an F4SE DLL.
 May still be loaded by

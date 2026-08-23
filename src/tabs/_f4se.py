@@ -29,11 +29,13 @@ TAG_NEUTRAL = "neutral"
 TAG_GOOD = "good"
 TAG_BAD = "bad"
 TAG_NOTE = "note"
+TAG_INDIE = "independent"
 
 EMOJI_DLL_UNKNOWN = "\N{BLACK QUESTION MARK ORNAMENT}"
 EMOJI_DLL_GOOD = "\N{HEAVY CHECK MARK}"
 EMOJI_DLL_BAD = ""
 EMOJI_DLL_NOTE = "\N{WARNING SIGN}"
+EMOJI_DLL_INDIE = "\N{HEAVY ASTERISK}"
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +88,8 @@ class F4SETab(CMCTabFrame):
 		tree_dlls.tag_configure(TAG_NEUTRAL, foreground=COLOR_NEUTRAL_1)
 		tree_dlls.tag_configure(TAG_GOOD, foreground=COLOR_GOOD)
 		tree_dlls.tag_configure(TAG_BAD, foreground=COLOR_BAD)
-		tree_dlls.tag_configure(TAG_NOTE, foreground=COLOR_NOTE)  # why yellow
+		tree_dlls.tag_configure(TAG_NOTE, foreground=COLOR_NOTE)
+		tree_dlls.tag_configure(TAG_INDIE, foreground=COLOR_INDIE)
 
 		scroll_tree_y = ttk.Scrollbar(
 			self,
@@ -114,11 +117,11 @@ class F4SETab(CMCTabFrame):
 		text_about_f4se.insert(END, ABOUT_F4SE_DLLS)
 		text_about_f4se.tag_add(TAG_NEUTRAL, "2.0", "2.18")
 		text_about_f4se.tag_add(TAG_GOOD, "6.0", "6.1")
-		text_about_f4se.tag_add(TAG_BAD, "8.0", "8.1")
+		text_about_f4se.tag_add(TAG_INDIE, "8.0", "8.1")
 		text_about_f4se.tag_add(TAG_NEUTRAL, "10.0", "10.1")
 		text_about_f4se.tag_add(TAG_NOTE, "14.0", "14.1")
 		text_about_f4se.tag_configure(TAG_GOOD, foreground=COLOR_GOOD)
-		text_about_f4se.tag_configure(TAG_BAD, foreground=COLOR_BAD)
+		text_about_f4se.tag_configure(TAG_INDIE, foreground=COLOR_INDIE)
 		text_about_f4se.tag_configure(TAG_NEUTRAL, foreground=COLOR_NEUTRAL_2)
 		text_about_f4se.tag_configure(TAG_NOTE, foreground=COLOR_NOTE)
 		text_about_f4se.configure(state=DISABLED)
@@ -131,16 +134,39 @@ class F4SETab(CMCTabFrame):
 				tag = TAG_NEUTRAL
 				values = [EMOJI_DLL_UNKNOWN] * 3
 			else:
-				og = EMOJI_DLL_GOOD if info.get("SupportsOG") else EMOJI_DLL_BAD
-
 				supports_ngae = info.get("SupportsNGAE")
 				supports_ng = info.get("SupportsNG")
 				supports_ae = info.get("SupportsAE")
+				is_addrindependent = info.get("AddrIndependent")
+				is_structindependent = info.get("StructIndependent")
+
+				og = (
+					EMOJI_DLL_INDIE
+					if (info.get("AddrIndependent") or info.get("StructIndependent")) and info.get("SupportsOG")
+					else EMOJI_DLL_GOOD
+					if info.get("SupportsOG")
+					else EMOJI_DLL_BAD
+				)
 
 				if supports_ngae:
-					ng = EMOJI_DLL_NOTE if supports_ng is None else EMOJI_DLL_GOOD if supports_ng else EMOJI_DLL_BAD
-					ae = EMOJI_DLL_NOTE if supports_ae is None else EMOJI_DLL_GOOD if supports_ae else EMOJI_DLL_BAD
-
+					ng = (
+						EMOJI_DLL_INDIE
+						if is_structindependent or is_addrindependent
+						else EMOJI_DLL_NOTE
+						if supports_ng is None
+						else EMOJI_DLL_GOOD
+						if supports_ng
+						else EMOJI_DLL_BAD
+					)
+					ae = (
+						EMOJI_DLL_INDIE
+						if is_structindependent or is_addrindependent
+						else EMOJI_DLL_NOTE
+						if supports_ae is None
+						else EMOJI_DLL_GOOD
+						if supports_ae
+						else EMOJI_DLL_BAD
+					)
 				else:
 					ng = EMOJI_DLL_BAD
 					ae = EMOJI_DLL_BAD
@@ -150,13 +176,21 @@ class F4SETab(CMCTabFrame):
 				if self.cmc.game.is_foae():
 					cg = EMOJI_DLL_GOOD if supports_ae else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
 
-				elif self.cmc.game.is_foog():
-					cg = EMOJI_DLL_GOOD if info.get("SupportsOG") else "\N{CROSS MARK}"
-
 				elif self.cmc.game.is_fong():
 					cg = EMOJI_DLL_GOOD if supports_ng else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
 
+				elif self.cmc.game.is_foog():
+					cg = EMOJI_DLL_GOOD if info.get("SupportsOG") else "\N{CROSS MARK}"
+
 				values = [og, ng, ae, cg]
-				tag = TAG_NOTE if cg == EMOJI_DLL_NOTE else TAG_GOOD if cg == EMOJI_DLL_GOOD else TAG_BAD
+				tag = (
+					TAG_INDIE
+					if is_structindependent or is_addrindependent
+					else TAG_NOTE
+					if cg == EMOJI_DLL_NOTE
+					else TAG_GOOD
+					if cg == EMOJI_DLL_GOOD
+					else TAG_BAD
+				)
 
 			tree_dlls.insert("", END, text=dll, values=values, tags=tag)

@@ -247,18 +247,35 @@ def parse_dll(file_path: Path) -> DLLInfo:
 		"SupportsNGAE": hasattr(dll, "F4SEPlugin_Version"),
 		"SupportsNG": None,
 		"SupportsAE": None,
+		"AddrIndependent": None,
+		"StructIndependent": None,
 	}
 
+	sym = ctypes.cast(
+		dll.F4SEPlugin_Version,
+		POINTER(F4SEPluginVersionData),
+	)
+	v = sym.contents
+
+	if 0b001 & v.addressIndependence:
+		dll_info["AddrIndependent"] = True
+
+	if 0b001 & v.structureIndependence:
+		dll_info["StructIndependent"] = True
+
 	if dll_info["SupportsNGAE"]:
-		sym = ctypes.cast(
-			dll.F4SEPlugin_Version,
-			POINTER(F4SEPluginVersionData),
-		)
-		v = sym.contents
 		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
+			if 0b010 & v.addressIndependence:
+				dll_info["AddrIndependent"] = True
+			if 0b010 & v.structureIndependence:
+				dll_info["StructIndependent"] = True
 			dll_info["SupportsNG"] = True
 
 		if any(n > 0x010B0890 for n in v.compatibleVersions):
+			if 0b100 & v.addressIndependence:
+				dll_info["AddrIndependent"] = True
+			if 0b100 & v.structureIndependence:
+				dll_info["StructIndependent"] = True
 			dll_info["SupportsAE"] = True
 
 	return dll_info
