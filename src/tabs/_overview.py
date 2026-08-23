@@ -390,7 +390,7 @@ class OverviewTab(CMCTabFrame):
 		).grid(column=1, row=6, sticky=E, padx=(5, 0))
 
 		# Column 2
-		if self.cmc.game.install_type == InstallType.AE2:
+		if self.cmc.game.install_type in {InstallType.Obsolete2, InstallType.AE2}:
 			results = f" / {MAX_ARCHIVES_GNRL_AE}\n / {MAX_ARCHIVES_DX10_AE}\n / {MAX_ARCHIVES_GNRL_AE + MAX_ARCHIVES_DX10_AE}"
 		else:
 			results = f" / {MAX_ARCHIVES_GNRL}\n / {MAX_ARCHIVES_DX10}\n / {MAX_ARCHIVES_GNRL + MAX_ARCHIVES_DX10}"
@@ -548,11 +548,19 @@ class OverviewTab(CMCTabFrame):
 			case "GNRL":
 				num = self.cmc.game.ba2_count_gnrl
 				# num = len(self.cmc.game.archives_gnrl)
-				limit = MAX_ARCHIVES_GNRL_AE if self.cmc.game.install_type == InstallType.AE2 else MAX_ARCHIVES_GNRL
+				limit = (
+					MAX_ARCHIVES_GNRL_AE
+					if self.cmc.game.install_type in {InstallType.Obsolete2, InstallType.AE2}
+					else MAX_ARCHIVES_GNRL
+				)
 			case "DX10":
 				num = self.cmc.game.ba2_count_dx10
 				# num = len(self.cmc.game.archives_dx10)
-				limit = MAX_ARCHIVES_DX10_AE if self.cmc.game.install_type == InstallType.AE2 else MAX_ARCHIVES_DX10
+				limit = (
+					MAX_ARCHIVES_DX10_AE
+					if self.cmc.game.install_type in {InstallType.Obsolete2, InstallType.AE2}
+					else MAX_ARCHIVES_DX10
+				)
 			case "Full":
 				num = self.cmc.game.module_count_full
 				limit = MAX_MODULES_FULL
@@ -564,7 +572,7 @@ class OverviewTab(CMCTabFrame):
 				# num = len(self.cmc.game.archives_gnrl) + len(self.cmc.game.archives_dx10)
 				limit = (
 					MAX_ARCHIVES_GNRL_AE + MAX_ARCHIVES_DX10_AE
-					if self.cmc.game.install_type == InstallType.AE2
+					if self.cmc.game.install_type in {InstallType.Obsolete2, InstallType.AE2}
 					else MAX_ARCHIVES_GNRL + MAX_ARCHIVES_DX10
 				)
 			case "TotalModules":

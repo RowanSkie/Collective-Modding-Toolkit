@@ -38,6 +38,7 @@ class InstallType(StrEnum):
 	DG = "Down-Grade"
 	NG = "Next-Gen"
 	AE = "Pre-240 Anniversary"
+	Obsolete2 = "Obsolete"
 	AE2 = "Anniversary"
 	NGAE = "Next-Gen & Anniversary"
 	Unknown = "Unknown"

@@ -95,7 +95,7 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.11.169.0": InstallType.Obsolete,
 		"1.11.191.0": InstallType.Obsolete,
 		"1.11.221.0": InstallType.Obsolete,
-		"1.11.240.0": InstallType.AE2,
+		"1.11.240.0": InstallType.AE2,  # if we ever get another update, mark as Obsolete2 to keep the 1024 BA2 changes
 	},
 	"Fallout4Launcher.exe": {
 		"02445570": InstallType.OG,  # 1.10.120 to 1.10.163
@@ -110,7 +110,7 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 	},
 	"steam_api64.dll": {
 		"2.89.45.4": InstallType.OG,  # 1.10.120 to 1.10.163
-		"7.40.51.27": InstallType.NGAE,  # 1.10.980 to 1.11.191
+		"7.40.51.27": InstallType.NGAE,  # 1.10.980 to 1.11.240
 		"BD3AA35F": InstallType.OG,  # GOG
 	},
 	"f4se_loader.exe": {
