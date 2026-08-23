@@ -764,7 +764,7 @@ class OverviewTab(CMCTabFrame):
 					),
 				)
 
-		if self.cmc.game.install_type == InstallType.AE or self.cmc.game.install_type == InstallType.AE2:
+		if self.cmc.game.install_type in {InstallType.AE, InstallType.AE2}:
 			ae_ba2_path = self.cmc.game.data_path / "Fallout4 - TexturesPatch.ba2"
 			if is_file(ae_ba2_path):
 				self.cmc.game.archives_enabled.add(ae_ba2_path)
