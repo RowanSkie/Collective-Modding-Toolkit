@@ -255,10 +255,10 @@ def parse_dll(file_path: Path) -> DLLInfo:
 			POINTER(F4SEPluginVersionData),
 		)
 		v = sym.contents
-		if F4SE_RUNTIME_NG in v.compatibleVersions:
+		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
 			dll_info["SupportsNG"] = True
 
-		if F4SE_RUNTIME_AE in v.compatibleVersions:
+		if 0x010B0F00 in v.compatibleVersions:  # I would globals this but jesus christ
 			dll_info["SupportsAE"] = True
 
 	return dll_info
