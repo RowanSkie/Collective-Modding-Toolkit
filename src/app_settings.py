@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael
+# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@ try:
 except:
 	logger.exception("Settings : Failed to detect download source.")
 	download_source = "nexus"
+
 
 class AppSettingsDict(TypedDict):
 	log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"]

@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael
+# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,9 +39,7 @@ class AutoFixResult:
 		self.details = details
 
 
-AUTO_FIXES: dict[SolutionType, Callable[..., AutoFixResult]] = {
-
-}
+AUTO_FIXES: dict[SolutionType, Callable[..., AutoFixResult]] = {}
 
 
 def do_autofix(results_pane: tabs.ResultDetailsPane, selection: str) -> None:

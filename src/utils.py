@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael
+# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -58,6 +58,7 @@ win11_24h2 = sys.getwindowsversion().build >= 26100
 
 type Fields = Sequence[tuple[str, type[_CDataType]] | tuple[str, type[_CDataType], int]]
 
+
 class F4SEPluginVersionData(ctypes.Structure):
 	_fields_: ClassVar[Fields] = [
 		("dataVersion", ctypes.c_uint32),
@@ -72,6 +73,7 @@ class F4SEPluginVersionData(ctypes.Structure):
 		("reservedBreaking", ctypes.c_uint32),
 		("reserved", ctypes.c_uint8 * 512),
 	]
+
 
 def rglob(path: Path, ext: str) -> Generator[Path]:
 	if not win11_24h2:
@@ -113,7 +115,7 @@ def is_dir(path: Path) -> bool:
 
 	try:
 		_ = next(path.iterdir(), None)
-	except (NotADirectoryError, FileNotFoundError):
+	except NotADirectoryError, FileNotFoundError:
 		return False
 	return True
 
@@ -135,7 +137,7 @@ def exists(path: Path) -> bool:
 	# Folders
 	try:
 		_ = next(path.iterdir(), None)
-	except (PermissionError, NotADirectoryError):
+	except PermissionError, NotADirectoryError:
 		# PermissionError: Actual folder but no permission
 		# NotADirectoryError: Was a file with actual PermissionError
 		pass
@@ -370,7 +372,7 @@ def check_for_update_nexus() -> str | None:
 			if Version(latest_version) > Version(str(APP_VERSION)):
 				logger.info("Update Check : Nexus Mods : Update Available : v%s", latest_version)  # TODO: test variable
 				return latest_version
-	except (requests.RequestException, InvalidVersion, IndexError):
+	except requests.RequestException, InvalidVersion, IndexError:
 		logger.exception("Update Check : Nexus Mods : Failed")  # TODO: Reasons
 		return None
 
@@ -398,7 +400,7 @@ def check_for_update_github() -> str | None:
 			if Version(latest_version) > Version(str(APP_VERSION)):
 				logger.info("Update Check : GitHub : Update Available : v%s", latest_version)
 				return latest_version
-		except (requests.JSONDecodeError, InvalidVersion):
+		except requests.JSONDecodeError, InvalidVersion:
 			logger.exception("Update Check : GitHub : Failed")
 			return None
 

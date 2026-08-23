@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael
+# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,7 +44,6 @@ class INIFile:
 		self.line_parts: list[list[tuple[INIPart, str | None]]] = []
 		self.parse()
 
-
 	def add_value(self, line_stripped: str, section: str | None, setting: str | None, value: str) -> None:
 		whitespace = None
 		if value[-1] in string.whitespace:
@@ -81,7 +80,7 @@ class INIFile:
 
 				for index, token in enumerate(line_stripped):
 					if ini_part == INIPart.Whitespace and token not in string.whitespace:
-						self.line_parts[-1].append((INIPart.Whitespace, line_stripped[start_index : index]))
+						self.line_parts[-1].append((INIPart.Whitespace, line_stripped[start_index:index]))
 						ini_part = None
 						start_index = -1
 
@@ -138,7 +137,7 @@ class INIFile:
 
 					if ini_part == INIPart.Setting:
 						if token == "=":
-							setting = line_stripped[start_index : index]
+							setting = line_stripped[start_index:index]
 							self.line_parts[-1].append((INIPart.Setting, setting))
 							self.line_parts[-1].append((INIPart.Assignment, token))
 							ini_part = INIPart.Value

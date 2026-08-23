@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael
+# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@ EMOJI_DLL_BAD = ""
 EMOJI_DLL_NOTE = "\N{WARNING SIGN}"
 
 logger = logging.getLogger(__name__)
+
 
 class F4SETab(CMCTabFrame):
 	def __init__(self, cmc: CMCheckerInterface, notebook: ttk.Notebook) -> None:
