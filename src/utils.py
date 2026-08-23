@@ -43,7 +43,7 @@ from mod_manager_info import ModManagerInfo
 if TYPE_CHECKING:
 	import io
 	from collections.abc import Generator, Sequence
-	from ctypes import _CDataType  # pyright: ignore[reportPrivateUsage] # noqa: PLC2701
+	from ctypes import _CDataType  # pyright: ignore[reportPrivateUsage]
 
 	from enums import CSIDL
 	from helpers import DLLInfo
