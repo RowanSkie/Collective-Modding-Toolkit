@@ -94,7 +94,7 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.11.159.0": InstallType.Obsolete,
 		"1.11.169.0": InstallType.Obsolete,
 		"1.11.191.0": InstallType.Obsolete,
-		"1.11.221.0": InstallType.AE,
+		"1.11.221.0": InstallType.Obsolete,
 		"1.11.240.0": InstallType.AE2,
 	},
 	"Fallout4Launcher.exe": {
@@ -105,7 +105,7 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"8C52BE93": InstallType.Obsolete,  # 1.11.169a
 		"591009C9": InstallType.Obsolete,  # 1.11.169b
 		"720BB9C3": InstallType.Obsolete,  # 1.11.191
-		"CA61EDD7": InstallType.AE,  # 1.11.221
+		"CA61EDD7": InstallType.Obsolete,  # 1.11.221
 		"57D1C794": InstallType.AE2,  # 1.11.240
 	},
 	"steam_api64.dll": {
@@ -120,7 +120,7 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"0.0.7.5": InstallType.Obsolete,
 		"0.0.7.6": InstallType.Obsolete,
 		"0.0.7.7": InstallType.Obsolete,
-		"0.0.7.8": InstallType.AE,
+		"0.0.7.8": InstallType.Obsolete,
 		"0.0.7.9": InstallType.AE2,
 	},
 	"f4se_steam_loader.dll": {
@@ -130,13 +130,13 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.10.162.0": InstallType.OG,
 		"1.10.943.1": InstallType.Obsolete,
 		"1.10.982.3": InstallType.NG,
-		"1.11.137.0": InstallType.AE,
+		"1.11.137.0": InstallType.Obsolete,
 		"1.11.240.0": InstallType.AE2,
 	},
 	"Tools\\Archive2\\Archive2.exe": {
 		"4CDFC7B5": InstallType.OG,
 		"71A5240B": InstallType.NG,
-		"C867674F": InstallType.AE,
+		"C867674F": InstallType.Obsolete,
 		"9A059211": InstallType.AE2,
 	},
 }
