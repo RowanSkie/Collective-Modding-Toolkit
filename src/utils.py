@@ -258,7 +258,7 @@ def parse_dll(file_path: Path) -> DLLInfo:
 		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
 			dll_info["SupportsNG"] = True
 
-		if 0x010B0F00 in v.compatibleVersions:  # I would globals this but jesus christ
+		if any(n > 0x010B0890 for n in v.compatibleVersions):
 			dll_info["SupportsAE"] = True
 
 	return dll_info
