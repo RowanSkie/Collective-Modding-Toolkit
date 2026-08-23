@@ -86,7 +86,7 @@ class F4SETab(CMCTabFrame):
 		tree_dlls.tag_configure(TAG_NEUTRAL, foreground=COLOR_NEUTRAL_1)
 		tree_dlls.tag_configure(TAG_GOOD, foreground=COLOR_GOOD)
 		tree_dlls.tag_configure(TAG_BAD, foreground=COLOR_BAD)
-		tree_dlls.tag_configure(TAG_NOTE, foreground="yellow")
+		tree_dlls.tag_configure(TAG_NOTE, foreground=COLOR_NOTE)  # why yellow
 
 		scroll_tree_y = ttk.Scrollbar(
 			self,
@@ -120,7 +120,7 @@ class F4SETab(CMCTabFrame):
 		text_about_f4se.tag_configure(TAG_GOOD, foreground=COLOR_GOOD)
 		text_about_f4se.tag_configure(TAG_BAD, foreground=COLOR_BAD)
 		text_about_f4se.tag_configure(TAG_NEUTRAL, foreground=COLOR_NEUTRAL_2)
-		text_about_f4se.tag_configure(TAG_NOTE, foreground="yellow")
+		text_about_f4se.tag_configure(TAG_NOTE, foreground=COLOR_NOTE)
 		text_about_f4se.configure(state=DISABLED)
 		text_about_f4se.grid(column=2, row=1, sticky=NSEW, padx=0)
 
