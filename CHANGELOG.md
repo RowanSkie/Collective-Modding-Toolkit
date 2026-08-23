@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.2] - ####-##-##
+
+### Added
+
+- Support for Anniversary Edition 1.11.221 and 1.11.240
+
+### Changed
+
+- Detect if the user is running 1.11.240 and updates the UI to support the updated ba2 limit.
+
 ## [0.6.1] - 2025-12-26
 
 ### Added
@@ -30,23 +40,20 @@
 ### Removed
 
 - #### Scanner
-
   - Complex Sorter INI Errors: Removed as it was rendered ineffective by later xEdit updates.
 
 ## [0.5.2] - 2025-01-13
 
-*This is the final Python version. No release was published for v0.5.2.*
+_This is the final Python version. No release was published for v0.5.2._
 
 ### Fixed
 
 - #### Scanner
-
   - Fixed pathing for files in MO2's overwrite that caused a FileNotFound error.
 
 ### Changed
 
 - #### Scanner
-
   - Complex Sorter INI Errors: More detailed check in case it's relevant, but no known changes in actual detections.
 
 ## [0.5.1] - 2025-01-09
@@ -54,13 +61,11 @@
 ### Added
 
 - #### Overview
-
   - If any `HEDR v????` modules are found, a button next to the count will open a list of modules.
 
 ### Fixed
 
 - #### Scanner
-
   - Complex Sorter INI Errors: Fixed a bug introduced just before the last release that resulted in the fix undoing itself.
 
 ## [0.5.0] - 2025-01-04
@@ -70,29 +75,26 @@
 - Info and errors are now logged to `cm-toolkit.log`
 
 - #### Scanner
-
   - Errors option: Checks for errors in mod configuration or files will be controlled by this option.
   - Complex Sorter INI Errors: xEdit v4.1.5g changed the name of the "Addon Index" field to "Parent Combination Index". Any INI files referencing this field will need to be updated to be compatible.  
-  ⚠️ If you have already run Complex Sorter on these xEdit versions, you should delete/recreate your output files.
+    ⚠️ If you have already run Complex Sorter on these xEdit versions, you should delete/recreate your output files.
   - Auto-Fix Button! For supported issues, the Scanner will provide an option to automatically resolve the detected problem.  
-  To start, this is only supported for Complex Sorter INI Errors.
+    To start, this is only supported for Complex Sorter INI Errors.
   - `*.vortex_backup` files will be ignored.
   - Copy Details Button: Copies all text from the result details pane.  
-  Thanks Alundra for the suggestion!
+    Thanks Alundra for the suggestion!
 
 - #### Settings
-
   - Settings Tab! Settings are saved to `settings.json`.  
-  Downgrader and Scanner settings will be remembered now.
+    Downgrader and Scanner settings will be remembered now.
   - Update Channel: Choose where to check for updates, Nexus Mods or GitHub.  
-  Updates will be released earlier via GitHub to allow time to catch issues before a more "stable" Nexus Mods release.
-  This defaults to where you downloaded from.
+    Updates will be released earlier via GitHub to allow time to catch issues before a more "stable" Nexus Mods release.
+    This defaults to where you downloaded from.
   - Log Level: Choose how noisy you want your log file. Debug will likely be most useful for issue reporting.
 
 ### Fixed
 
 - #### Overview
-
   - Fixed detection of `steam_api64.dll` for GOG users.
 
 ## [0.4.0] - 2024-12-26
@@ -100,48 +102,42 @@
 ### Added
 
 - #### Overview
-
   - PC Specs now displayed, along with a warning about issues with MO2's VFS if Windows 11 24H2 is detected.
   - Update checking for Nexus Mods.
 
 - #### Scanner
-
   - Race Subgraphs option. Counts the total number of Subgraph Addititve Race subrecords (RACE \ SADD).
-  Thanks Zzyxzz for suggesting this and providing the details!
+    Thanks Zzyxzz for suggesting this and providing the details!
   - Junk file extensions: `.bak` and `.tmp`.  
-  Thanks Alundra for all the suggestions! More on the rest later.
+    Thanks Alundra for all the suggestions! More on the rest later.
   - Solution text for Invalid Module versions.
 
 - #### Tools
-
   - Button for BA2 Merging Automation Tool (BMAT).
   - Channel names for CM Authors' tools.
 
 ### Changed
 
 - #### Scanner
-
   - Improved results display with collapsible groups by type, a count, and a note to click for details.
   - Better detection and description for F4SE script overrides, as there are some mods that intentionally provide these.  
-  Thanks Argon for the feedback!
+    Thanks Argon for the feedback!
   - Mod files and Data will only be scanned if selected options require it.
 
 ### Fixed
 
-  - Potential crash reading INI files if a setting was not within any [section].
+- Potential crash reading INI files if a setting was not within any [section].
 
 ## [0.3.2] - 2024-12-20
 
 ### Fixed
 
 - #### Overview
-
   - Files with missing version numbers should now show as Unknown instead of erroring.
 
 - #### Scanner
-
   - Ensure paths read from MO2 settings are converted to Path types.  
-  Should fix `TypeError: unsupported operand type(s) for /: 'str' and 'str'`.
+    Should fix `TypeError: unsupported operand type(s) for /: 'str' and 'str'`.
 
 ## [0.3.1] - 2024-12-20
 
@@ -150,13 +146,11 @@
 - Zip file now has the app in a subfolder named `Tools/CM-Toolkit/` to aid Collections.
 
 - #### Overview
-
   - Refreshing won't show errors again for `Fallout4.ccc` and `plugins.txt` if missing.
 
 ### Fixed
 
 - #### Scanner
-
   - Some MO2-specific code was being run when using Vortex.
 
 ## [0.3] - 2024-12-19
@@ -166,32 +160,27 @@
 - Pressing Space will close About windows.
 
 - #### Overview
-
   - Count for modules with unknown HEDR versions.
   - Note on Vortex support if detected. Overview should be accurate but Scanner can't yet identify the source mod for issues.
 
 - #### Scanner
-
   - Issues from Overview will be reported in the Scanner.
   - Detect BA2s that won't be loaded due to invalid file names.
   - Detect loose file overrides of F4SE's `*.pex` files.
 
 - #### Tools
-
   - Button for PJM's Precombine/Previs Patching Scripts.
 
   - #### Archive Patcher
-
     - File name filter to patch only specific archives.
 
   - #### Downgrader
-
     - Options to delete backups and delta patches after the patch process.
 
 ### Fixed
 
 - Issues caused by Windows 11 24H2 have been worked around.  
-It seems 24H2 made some of Python's file-related functions stop working inside MO2's virtual filesystem.
+  It seems 24H2 made some of Python's file-related functions stop working inside MO2's virtual filesystem.
 - Having a Documents folder in a non-default location works now.
 - UnicodeDecode error with non-English characters in INI files.
 - Wrong link for Cathedral Assets Optimizer
@@ -199,20 +188,17 @@ It seems 24H2 made some of Python's file-related functions stop working inside M
 ### Changed
 
 - #### Overview
-
   - Counts will now turn orange when within 5% of a limit.
 
 - #### F4SE
-
   - Whitelisted `ClockWidget.dll` for OG+NG support.
 
 - #### Scanner
-
   - Reworked how scanning is done to speed it up by only doing checks on Data instead of all staged mods.  
-  As a result, if two mods have identical problem files only the conflict winners are reported.
+    As a result, if two mods have identical problem files only the conflict winners are reported.
   - Whitelisted `*.cdf` files for `Data/Sound/`
   - Primary text color is now a light gray instead of white to be easier on the eyes.  
-  Colors will likely be configurable in a later update.
+    Colors will likely be configurable in a later update.
   - Scanning disabled when all options are disabled.
 
 ## [0.2.1] - 2024-12-01
@@ -220,13 +206,12 @@ It seems 24H2 made some of Python's file-related functions stop working inside M
 ### Added
 
 - #### Tools
-
   - Buttons linking to tools made by other authors.
 
 ### Fixed
 
 - BA2s listed in Fallout4.ini were not being counted properly.  
-On a clean game install the count is now 19 higher.
+  On a clean game install the count is now 19 higher.
 - The error window was failing to open when the app encountered a problem.
 - Mod manager detection details window was failing to open for Vortex users.
 - Text formatting was merging lines in the mod manager detection details window.
@@ -239,32 +224,30 @@ On a clean game install the count is now 19 higher.
 - No longer has all files compressed into a single exe. Anti-virus tends to flag single-exe Python apps as malware, and Nexus Mods quarantines such apps regularly. Planned features will likely require additional files, so the change from a single file was inevitable.
 
 - #### Overview
-
   - Counts for modules and archives now account for enabled plugins and validity of archive filenames.
   - `*.esl` files without the ESL header flag are now counted as Light as the engine forces the flag at runtime.
   - Binaries are now labeled with install type, and show version or hash on hover.
-  - Renamed *Invalid* module/archive counts to *Unreadable* and moved them to the top section.
+  - Renamed _Invalid_ module/archive counts to _Unreadable_ and moved them to the top section.
   - Corrected General BA2 limit to 256 and set Texture limit tentatively to the same.  
-  I intend to do my own testing at some point for the functional limit of texture archives.
+    I intend to do my own testing at some point for the functional limit of texture archives.
   - HEDR v0.95 count is now a neutral color as they're only a concern if Form IDs are out of range.  
-  A later update may attempt to detect these.
+    A later update may attempt to detect these.
 
 - #### F4SE
-
   - Non-whitelisted DLLs detected as OG+NG will have a ⚠️ as some only support both enough to tell users if they have the wrong DLL.
   - Filtered out Microsoft Visual C++ DLLs such as `msdia140.dll` from Buffout 4 NG.
 
 - #### Tools
-
   - #### Downgrader
 
-    - Merged Game and CK downgrade options since they both require `steam_api64.dll` to match.  
-Supporting version mixing is on the roadmap.
+        - Merged Game and CK downgrade options since they both require `steam_api64.dll` to match.
+
+    Supporting version mixing is on the roadmap.
 
 ### Added
 
 - The Scanner tab! The WIP Errors/Conflicts/Suggestions tabs were merged into one.  
-It currently only supports `Data/` and MO2's mods folder with basic checks like wrong file formats.
+  It currently only supports `Data/` and MO2's mods folder with basic checks like wrong file formats.
 - Tooltips for various elements on the Overview tab with related info.
 - Detection of MO2 settings for profiles, instances, and game/mod/INI paths.
 - Tool buttons in the Tools tab, with teasers for tentatively-planned tools.
