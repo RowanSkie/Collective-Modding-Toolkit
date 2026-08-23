@@ -36,7 +36,7 @@ COLOR_INFO = "dodger blue"
 COLOR_NEUTRAL_1 = "gray"
 COLOR_NEUTRAL_2 = "bisque"
 COLOR_WARNING = "orange"
-COLOR_NOTE = "yellow"
+COLOR_NOTE = "#C5C464"
 COLOR_INDIE = "#4583BC"
 
 NEXUS_LINK = "https://www.nexusmods.com/fallout4/mods/87907"
