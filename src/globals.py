@@ -37,7 +37,7 @@ COLOR_NEUTRAL_1 = "gray"
 COLOR_NEUTRAL_2 = "bisque"
 COLOR_WARNING = "orange"
 COLOR_NOTE = "yellow"
-COLOR_INDIE = "cyan"
+COLOR_INDIE = "#4583BC"
 
 NEXUS_LINK = "https://www.nexusmods.com/fallout4/mods/87907"
 DISCORD_INVITE = "https://discord.gg/tktyEyYHZH"
