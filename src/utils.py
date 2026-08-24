@@ -240,7 +240,7 @@ def get_crc32(file_path: Path, chunk_size: int = 65536, max_chunks: int | None =
 
 
 def parse_dll(file_path: Path) -> DLLInfo:
-	dll = WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
+	dll = ctypes.WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
 	dll_info: DLLInfo = {
 		"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
 		"SupportsOG": hasattr(dll, "F4SEPlugin_Query"),
@@ -258,24 +258,13 @@ def parse_dll(file_path: Path) -> DLLInfo:
 		)
 		v = sym.contents
 
-		if 0b001 & v.addressIndependence:
-			dll_info["AddrIndependent"] = True
-
-		if 0b001 & v.structureIndependence:
-			dll_info["StructIndependent"] = True
+		dll_info["AddrIndependent"] = bool(0b110 & v.addressIndependence)
+		dll_info["StructIndependent"] = bool(0b110 & v.structureIndependence)
 
 		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
-			if 0b010 & v.addressIndependence:
-				dll_info["AddrIndependent"] = True
-			if 0b010 & v.structureIndependence:
-				dll_info["StructIndependent"] = True
 			dll_info["SupportsNG"] = True
 
 		if any(n > 0x010B0890 for n in v.compatibleVersions):
-			if 0b100 & v.addressIndependence:
-				dll_info["AddrIndependent"] = True
-			if 0b100 & v.structureIndependence:
-				dll_info["StructIndependent"] = True
 			dll_info["SupportsAE"] = True
 
 	return dll_info

@@ -145,7 +145,7 @@ class F4SETab(CMCTabFrame):
 				if supports_ngae:
 					ng = (
 						EMOJI_DLL_INDIE
-						if is_structindependent or is_addrindependent
+						if is_structindependent and is_addrindependent
 						else EMOJI_DLL_NOTE
 						if supports_ng is None
 						else EMOJI_DLL_GOOD
@@ -154,7 +154,7 @@ class F4SETab(CMCTabFrame):
 					)
 					ae = (
 						EMOJI_DLL_INDIE
-						if is_structindependent or is_addrindependent
+						if is_structindependent and is_addrindependent
 						else EMOJI_DLL_NOTE
 						if supports_ae is None
 						else EMOJI_DLL_GOOD
@@ -168,18 +168,40 @@ class F4SETab(CMCTabFrame):
 
 				cg = "\N{CROSS MARK}"
 				if self.cmc.game.is_foae():
-					cg = EMOJI_DLL_GOOD if supports_ae else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
+					cg = (
+						EMOJI_DLL_INDIE
+						if is_addrindependent and is_structindependent
+						else EMOJI_DLL_GOOD
+						if supports_ae
+						else EMOJI_DLL_NOTE
+						if supports_ngae
+						else "\N{CROSS MARK}"
+					)
 
 				elif self.cmc.game.is_fong():
-					cg = EMOJI_DLL_GOOD if supports_ng else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
+					cg = (
+						EMOJI_DLL_INDIE
+						if is_addrindependent and is_structindependent
+						else EMOJI_DLL_GOOD
+						if supports_ng
+						else EMOJI_DLL_NOTE
+						if supports_ngae
+						else "\N{CROSS MARK}"
+					)
 
 				elif self.cmc.game.is_foog():
-					cg = EMOJI_DLL_GOOD if info.get("SupportsOG") else "\N{CROSS MARK}"
+					cg = (
+						EMOJI_DLL_INDIE
+						if is_addrindependent and is_structindependent
+						else EMOJI_DLL_GOOD
+						if info.get("SupportsOG")
+						else "\N{CROSS MARK}"
+					)
 
 				values = [og, ng, ae, cg]
 				tag = (
 					TAG_INDIE
-					if is_structindependent or is_addrindependent
+					if cg == EMOJI_DLL_INDIE
 					else TAG_NOTE
 					if cg == EMOJI_DLL_NOTE
 					else TAG_GOOD
