@@ -233,6 +233,7 @@ class DLLInfo(TypedDict):
 	SupportsAE: bool | None
 	AddrIndependent: bool | None
 	StructIndependent: bool | None
+	SupportsCurrent: bool | None
 
 
 class ProblemInfo:

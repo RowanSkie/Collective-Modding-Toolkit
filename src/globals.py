@@ -30,18 +30,18 @@ MAX_ARCHIVES_GNRL_AE = 1024
 MAX_ARCHIVES_DX10_AE = 1023
 
 COLOR_DEFAULT = "#CACACA"
-COLOR_GOOD = "green2"
-COLOR_BAD = "firebrick1"
+COLOR_GOOD = "#619267"
+COLOR_BAD = "#AF5A66"
 COLOR_INFO = "dodger blue"
 COLOR_NEUTRAL_1 = "gray"
 COLOR_NEUTRAL_2 = "bisque"
 COLOR_WARNING = "orange"
-COLOR_NOTE = "yellow"
-COLOR_INDIE = "#4583BC"
+COLOR_NOTE = "#C5C464"
+COLOR_INDIE = "#4b92da"
 
 NEXUS_LINK = "https://www.nexusmods.com/fallout4/mods/87907"
 DISCORD_INVITE = "https://discord.gg/tktyEyYHZH"
-GITHUB_LINK = "https://github.com/wxMichael/Collective-Modding-Toolkit"
+GITHUB_LINK = "https://github.com/RowanSkie/Collective-Modding-Toolkit"
 
 PATCHER_FILTER_OG = "Showing all v1\n(Includes Base Game/DLC/CC)"
 PATCHER_FILTER_NG = "Showing all v7 & v8\n(Includes Base Game/DLC/CC)"
@@ -195,14 +195,6 @@ ARCHIVE_NAME_WHITELIST = (
 	"dlcultrahighresolution - textures15.ba2",
 	"dlcultrahighresolution - textures16.ba2",
 )
-
-ADDIND_SIG = 0b001
-ADDIND_NG = 0b010
-ADDIND_AE = 0b100
-
-STRIND_NST = 0b001
-STRIND_NG = 0b010
-STRIND_AE = 0b100
 
 ABOUT_ARCHIVES_TITLE = "Bethesda Archive (BA2) Formats & Versions"
 ABOUT_ARCHIVES = """There are 2 formats and 3 versions for Fallout 4 BA2 files:
