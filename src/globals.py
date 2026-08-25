@@ -196,14 +196,6 @@ ARCHIVE_NAME_WHITELIST = (
 	"dlcultrahighresolution - textures16.ba2",
 )
 
-ADDIND_SIG = 0b001
-ADDIND_NG = 0b010
-ADDIND_AE = 0b100
-
-STRIND_NST = 0b001
-STRIND_NG = 0b010
-STRIND_AE = 0b100
-
 ABOUT_ARCHIVES_TITLE = "Bethesda Archive (BA2) Formats & Versions"
 ABOUT_ARCHIVES = """There are 2 formats and 3 versions for Fallout 4 BA2 files:
 • General (GNRL)

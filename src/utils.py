@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael
+# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -249,6 +249,7 @@ def parse_dll(file_path: Path) -> DLLInfo:
 		"SupportsAE": None,
 		"AddrIndependent": None,
 		"StructIndependent": None,
+		"SupportsCurrent": None,
 	}
 
 	if dll_info["SupportsNGAE"]:
@@ -266,6 +267,8 @@ def parse_dll(file_path: Path) -> DLLInfo:
 
 		if any(n > 0x010B0890 for n in v.compatibleVersions):
 			dll_info["SupportsAE"] = True
+
+		dll_info["SupportsCurrent"] = v.IsSupportVersion(version)
 
 	return dll_info
 
