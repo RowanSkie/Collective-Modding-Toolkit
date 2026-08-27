@@ -16,7 +16,6 @@
 # along with this program; if not, see <https://www.gnu.org/licenses/>.
 #
 
-
 import logging
 import os
 import sys
@@ -37,6 +36,9 @@ from utils import (
 )
 
 if TYPE_CHECKING:
+	import ctypes
+
+	import f4se_utils
 	from helpers import FileInfo
 	from mod_manager_info import ModManagerInfo
 
@@ -50,6 +52,7 @@ class GameInfo:
 		self._game_path_sv = game_path_sv
 		self.name: Literal["Fallout4"]
 		self.install_type = InstallType.Unknown
+		self.game_version: ctypes.c_uint32
 		self._game_path: Path
 		self._data_path: Path | None = None
 		self._f4se_path: Path | None = None
@@ -291,3 +294,7 @@ class GameInfo:
 
 	def is_fodg(self) -> bool:
 		return self._install_type == InstallType.DG
+
+	def load_game_version(self) -> c_uint32:
+		self.game_version = f4se_utils.RUNTIME_VERSION_1_11_240
+		return self.game_version
