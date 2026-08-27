@@ -24,7 +24,7 @@ import struct
 import sys
 import winreg
 import zlib
-from ctypes import POINTER, byref, c_int, create_unicode_buffer, sizeof, windll, wintypes
+from ctypes import byref, c_int, create_unicode_buffer, sizeof, windll, wintypes
 from pathlib import Path
 from tkinter import *
 from tkinter import ttk
@@ -46,7 +46,7 @@ if TYPE_CHECKING:
 	from ctypes import _CDataType  # pyright: ignore[reportPrivateUsage]
 
 	from enums import CSIDL
-	from helpers import DLLInfo
+	# from helpers import DLLInfo
 
 logger = logging.getLogger(__name__)
 
@@ -239,38 +239,41 @@ def get_crc32(file_path: Path, chunk_size: int = 65536, max_chunks: int | None =
 	return f"{checksum:08X}"
 
 
-def parse_dll(file_path: Path) -> DLLInfo:  # this shit fucked up
-	dll = ctypes.WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
-	dll_info: DLLInfo = {
-		"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
-		"SupportsOG": hasattr(dll, "F4SEPlugin_Query"),
-		"SupportsNGAE": hasattr(dll, "F4SEPlugin_Version"),
-		"SupportsNG": None,
-		"SupportsAE": None,
-		"AddrIndependent": None,
-		"StructIndependent": None,
-		"SupportsCurrent": None,
-	}
+# DEPRECIATED: Use f4se_utils.py!
+# def parse_dll(file_path: Path) -> DLLInfo:  # this shit fucked up
+# 	dll = ctypes.WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
+# 	dll_info: DLLInfo = {
+# 		"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
+# 		"SupportsOG": hasattr(dll, "F4SEPlugin_Query"),
+# 		"SupportsNGAE": hasattr(dll, "F4SEPlugin_Version"),
+# 		"SupportsNG": None,
+# 		"SupportsAE": None,
+# 		"AddrIndependentNG": None,
+# 		"AddrIndependentAE": None,
+# 		"StructIndependentNG": None,
+# 		"StructIndependentAE": None,
+# 		"SupportsCurrent": None,
+# 	}
 
-	if dll_info["SupportsNGAE"]:
-		sym = ctypes.cast(
-			dll.F4SEPlugin_Version,
-			POINTER(F4SEPluginVersionData),
-		)
-		v = sym.contents
+# 	if dll_info["SupportsNGAE"]:
+# 		sym = ctypes.cast(
+# 			dll.F4SEPlugin_Version,
+# 			POINTER(F4SEPluginVersionData),
+# 		)
+# 		v = sym.contents
 
-		dll_info["AddrIndependent"] = bool(0b110 & v.addressIndependence)
-		dll_info["StructIndependent"] = bool(0b110 & v.structureIndependence)
+# 		dll_info["AddrIndependent"] = bool(0b110 & v.addressIndependence)
+# 		dll_info["StructIndependent"] = bool(0b110 & v.structureIndependence)
 
-		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
-			dll_info["SupportsNG"] = True
+# 		if 0x010A3D40 in v.compatibleVersions or 0x010A3D80 in v.compatibleVersions:
+# 			dll_info["SupportsNG"] = True
 
-		if any(n > 0x010B0890 for n in v.compatibleVersions):
-			dll_info["SupportsAE"] = True
+# 		if any(n > 0x010B0890 for n in v.compatibleVersions):
+# 			dll_info["SupportsAE"] = True
 
-		# dll_info["SupportsCurrent"] = v.IsSupportVersion(version)
+# 		# dll_info["SupportsCurrent"] = v.IsSupportVersion(version)
 
-	return dll_info
+# 	return dll_info
 
 
 def ver_to_str(version: str | tuple[int, int, int, int]) -> str:

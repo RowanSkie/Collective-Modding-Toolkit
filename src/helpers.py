@@ -231,8 +231,10 @@ class DLLInfo(TypedDict):
 	SupportsNGAE: bool
 	SupportsNG: bool | None
 	SupportsAE: bool | None
-	AddrIndependent: bool | None
-	StructIndependent: bool | None
+	AddrIndependentNG: bool | None
+	AddrIndependentAE: bool | None
+	StructIndependentNG: bool | None
+	StructIndependentAE: bool | None
 	SupportsCurrent: bool | None
 
 
