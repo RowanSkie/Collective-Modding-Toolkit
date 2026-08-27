@@ -1,10 +1,12 @@
 # RowanSkie's Fork of CMT
 
-Original Readme below.
+Custom CMT fork by RowanSkie to fix AE shenanigans + BA2 limits.
 
 ## Building
 
 `uv run pyinstaller -i src/icon.ico -w --onefile --clean -p src/sv_ttk -p src/patcher --add-data src/assets:assets src/main.py `
+
+Original Readme below.
 
 ---
 
