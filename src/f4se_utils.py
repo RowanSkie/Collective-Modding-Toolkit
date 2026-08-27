@@ -1,3 +1,5 @@
+# code originally written by perchik71
+
 import ctypes
 import logging
 import typing
@@ -8,17 +10,16 @@ if typing.TYPE_CHECKING:
 
 	from helpers import DLLInfo
 
-P71_DEBUG_F4SE_LIBRARY = 1
 
 logger = logging.getLogger(__name__)
 
 
-def MAKE_EXE_VERSION_EX(major, minor, build, sub):
+def MAKE_EXE_VERSION_EX(major: int, minor: int, build: int, sub: int):
 	result = ((major & 0xFF) << 24) | ((minor & 0xFF) << 16) | ((build & 0xFFF) << 4) | (sub & 0xF)
 	return ctypes.c_uint32(result).value
 
 
-def MAKE_EXE_VERSION(major, minor, build):
+def MAKE_EXE_VERSION(major: int, minor: int, build: int):
 	return MAKE_EXE_VERSION_EX(major, minor, build, 0)
 
 
@@ -225,9 +226,9 @@ class F4SEPluginVersionData(ctypes.Structure):
 
 		result = 0
 		if self.HasSupportAddressLibraryAE() and self.HasSupportStructureIndependenceAE():
-			result = result | VersionSupport.kVersionSupportAE
+			result |= VersionSupport.kVersionSupportAE
 		if self.HasSupportAddressLibraryNG() and self.HasSupportStructureIndependenceNG():
-			result = result | VersionSupport.kVersionSupportNG
+			result |= VersionSupport.kVersionSupportNG
 
 		return result
 
@@ -261,23 +262,28 @@ class F4SEPluginVersionData(ctypes.Structure):
 		return not (not hasVersionIndependent and not self.HasCompatibleCurrentVersion(version))
 
 	def IsSupportVersionNG(self):
-		return self.IsSupportVersion(RUNTIME_VERSION_1_10_980) or self.IsSupportVersion(RUNTIME_VERSION_1_10_984)
+		# evildarkarchon: fixed more pythonic
+		result = (self.IsSupportVersion(n) for n in (RUNTIME_VERSION_1_10_980, RUNTIME_VERSION_1_10_984))
+		return bool(result)
 
 	def IsSupportVersionAE(self):
+		# evildarkarchon: fixed more pythonic
 		result = (
 			self.IsSupportVersion(n)
 			for n in (
-				RUNTIME_1_11_137,
-				RUNTIME_1_11_159,
+				RUNTIME_VERSION_1_11_137,
+				RUNTIME_VERSION_1_11_159,
 				RUNTIME_VERSION_1_11_169,
 				RUNTIME_VERSION_1_11_191,
 				RUNTIME_VERSION_1_11_221,
 				RUNTIME_VERSION_1_11_240,
 			)
 		)
-		return any(result)
+		return bool(result)
 
 
+## version requirement for this def is cursed as fuck
+# def parse_dll(file_path: Path, version: ctypes.c_uint32) -> DLLInfo:
 def parse_dll(file_path: Path) -> DLLInfo:
 	dll = ctypes.WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
 	dll_info: DLLInfo = {
@@ -300,13 +306,12 @@ def parse_dll(file_path: Path) -> DLLInfo:
 			ctypes.POINTER(F4SEPluginVersionData),
 		).contents
 
-		logger.debug("dataVersion: {v.dataVersion:>20}")
-		logger.debug("pluginVersion: {v.pluginVersion:>23}")
-		logger.debug("name: {v.name!s:>46}")
-		logger.debug("author: {v.author!s:>36}")
-		logger.debug("addressIndependence: {v.addressIndependence:>12}")
-		logger.debug("structureIndependence: {v.structureIndependence:>10}")
-		logger.debug("compatibleVersions:", "".rjust(11), *v.compatibleVersions)
+		logger.debug("dataVersion: %s", v.dataVersion)
+		logger.debug("pluginVersion: %s", v.pluginVersion)
+		logger.debug("name: %s", v.name)
+		logger.debug("author: %s", v.author)
+		logger.debug("addressIndependence: %s", v.addressIndependence)
+		logger.debug("structureIndependence: %s", v.structureIndependence)
 
 		# checks NG supports
 		dll_info["AddrIndependentNG"] = v.HasSupportAddressLibraryNG() or v.HasSupportSignatureScanning()
@@ -329,7 +334,7 @@ def parse_dll(file_path: Path) -> DLLInfo:
 			# Check known NG versions
 			dll_info["SupportsAE"] = v.IsSupportVersionAE()
 
-		# dll_info["SupportsCurrent"] = v.IsSupportVersion(version) # remember to bring back
+		# dll_info["SupportsCurrent"] = v.IsSupportVersion(version)  # this section of the code is cursed
 	return dll_info
 
 

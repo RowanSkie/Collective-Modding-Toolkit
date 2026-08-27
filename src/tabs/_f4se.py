@@ -21,7 +21,7 @@ import logging
 from tkinter import *
 from tkinter import ttk
 
-from f4se_utils import parse_dll
+import f4se_utils
 from globals import *
 from helpers import CMCheckerInterface, CMCTabFrame, DLLInfo
 
@@ -62,8 +62,8 @@ class F4SETab(CMCTabFrame):
 		for dll_file in self.cmc.game.f4se_path.iterdir():
 			if dll_file.suffix.lower() == ".dll" and not dll_file.name.startswith("msdia"):
 				logger.debug("Scanning %s", dll_file.name)
-				self.dll_info[dll_file.name] = parse_dll(dll_file)
-
+				self.dll_info[dll_file.name] = f4se_utils.parse_dll(dll_file)
+				# TODO: make this actually scan the game
 		return True
 
 	def _build_gui(self) -> None:
@@ -139,6 +139,7 @@ class F4SETab(CMCTabFrame):
 				supports_ngae = info.get("SupportsNGAE")
 				supports_ng = info.get("SupportsNG")
 				supports_ae = info.get("SupportsAE")
+				supports_game = info.get("SupportsCurrent")
 				is_addrindependent_ng = info.get("AddrIndependentNG")
 				is_structindependent_ng = info.get("StructIndependentNG")
 				is_addrindependent_ae = info.get("AddrIndependentAE")
@@ -148,18 +149,18 @@ class F4SETab(CMCTabFrame):
 					ng = (
 						EMOJI_DLL_INDIE
 						if is_addrindependent_ng and is_structindependent_ng
-						else EMOJI_DLL_NOTE
-						if supports_ng is None
 						else EMOJI_DLL_GOOD
+						if supports_ng and supports_game
+						else EMOJI_DLL_NOTE
 						if supports_ng
 						else EMOJI_DLL_BAD
 					)
 					ae = (
 						EMOJI_DLL_INDIE
 						if is_addrindependent_ae and is_structindependent_ae
-						else EMOJI_DLL_NOTE
-						if supports_ae is None
 						else EMOJI_DLL_GOOD
+						if supports_ae and supports_game
+						else EMOJI_DLL_NOTE
 						if supports_ae
 						else EMOJI_DLL_BAD
 					)
@@ -170,15 +171,39 @@ class F4SETab(CMCTabFrame):
 
 				cg = "\N{CROSS MARK}"
 				if self.cmc.game.is_foae():
-					cg = EMOJI_DLL_GOOD if supports_ae else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
+					cg = (
+						EMOJI_DLL_INDIE
+						if is_addrindependent_ae or is_structindependent_ae
+						else EMOJI_DLL_GOOD
+						if supports_ae
+						else EMOJI_DLL_NOTE
+						if supports_ngae
+						else "\N{CROSS MARK}"
+					)
 
 				elif self.cmc.game.is_fong():
-					cg = EMOJI_DLL_GOOD if supports_ng else EMOJI_DLL_NOTE if supports_ngae else "\N{CROSS MARK}"
+					cg = (
+						EMOJI_DLL_INDIE
+						if is_addrindependent_ng or is_structindependent_ng
+						else EMOJI_DLL_GOOD
+						if supports_ng
+						else EMOJI_DLL_NOTE
+						if supports_ngae
+						else "\N{CROSS MARK}"
+					)
 
 				elif self.cmc.game.is_foog():
 					cg = EMOJI_DLL_GOOD if info.get("SupportsOG") else "\N{CROSS MARK}"
 
 				values = [og, ng, ae, cg]
-				tag = TAG_NOTE if cg == EMOJI_DLL_NOTE else TAG_GOOD if cg == EMOJI_DLL_GOOD else TAG_BAD
+				tag = (
+					TAG_INDIE
+					if cg == EMOJI_DLL_INDIE
+					else TAG_NOTE
+					if cg == EMOJI_DLL_NOTE
+					else TAG_GOOD
+					if cg == EMOJI_DLL_GOOD
+					else TAG_BAD
+				)
 
 			tree_dlls.insert("", END, text=dll, values=values, tags=tag)

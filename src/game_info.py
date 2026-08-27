@@ -25,6 +25,7 @@ from tkinter import *
 from tkinter import filedialog, messagebox
 from typing import TYPE_CHECKING, Literal
 
+import f4se_utils
 from enums import CSIDL, InstallType, Language
 from utils import (
 	find_mod_manager,
@@ -38,7 +39,6 @@ from utils import (
 if TYPE_CHECKING:
 	import ctypes
 
-	import f4se_utils
 	from helpers import FileInfo
 	from mod_manager_info import ModManagerInfo
 

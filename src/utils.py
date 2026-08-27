@@ -239,7 +239,8 @@ def get_crc32(file_path: Path, chunk_size: int = 65536, max_chunks: int | None =
 	return f"{checksum:08X}"
 
 
-# DEPRECIATED: Use f4se_utils.py!
+## DEPRECIATED: Use f4se_utils.py!
+## Saved for legacy use, in case old one is screwed up or something
 # def parse_dll(file_path: Path) -> DLLInfo:  # this shit fucked up
 # 	dll = ctypes.WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
 # 	dll_info: DLLInfo = {
