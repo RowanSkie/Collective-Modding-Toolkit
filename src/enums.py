@@ -33,12 +33,12 @@ class CSIDL(IntEnum):
 
 
 class InstallType(StrEnum):
-	Obsolete = "Obsolete"
+	Obsolete = "Obsolete (OGNG)"
 	OG = "Old-Gen"
 	DG = "Down-Grade"
 	NG = "Next-Gen"
 	AE = "Anniversary"  # DO NOT USE
-	Obsolete2 = "Obsolete (Post-240)"
+	Obsolete2 = "Obsolete"
 	AE2 = "Anniversary"
 	NGAE = "Next-Gen & Anniversary"
 	Unknown = "Unknown"
