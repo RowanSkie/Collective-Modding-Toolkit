@@ -24,7 +24,7 @@ import struct
 import sys
 import winreg
 import zlib
-from ctypes import POINTER, WinDLL, byref, c_int, create_unicode_buffer, sizeof, windll, wintypes
+from ctypes import POINTER, byref, c_int, create_unicode_buffer, sizeof, windll, wintypes
 from pathlib import Path
 from tkinter import *
 from tkinter import ttk
@@ -239,7 +239,7 @@ def get_crc32(file_path: Path, chunk_size: int = 65536, max_chunks: int | None =
 	return f"{checksum:08X}"
 
 
-def parse_dll(file_path: Path) -> DLLInfo:
+def parse_dll(file_path: Path) -> DLLInfo:  # this shit fucked up
 	dll = ctypes.WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
 	dll_info: DLLInfo = {
 		"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
@@ -268,7 +268,7 @@ def parse_dll(file_path: Path) -> DLLInfo:
 		if any(n > 0x010B0890 for n in v.compatibleVersions):
 			dll_info["SupportsAE"] = True
 
-		dll_info["SupportsCurrent"] = v.IsSupportVersion(version)
+		# dll_info["SupportsCurrent"] = v.IsSupportVersion(version)
 
 	return dll_info
 
