@@ -148,7 +148,7 @@ class F4SETab(CMCTabFrame):
 				if supports_ngae:
 					ng = (
 						EMOJI_DLL_INDIE
-						if is_addrindependent_ng or is_structindependent_ng
+						if is_addrindependent_ng and is_structindependent_ng
 						else EMOJI_DLL_GOOD
 						if supports_ng and supports_game
 						else EMOJI_DLL_NOTE
@@ -157,7 +157,7 @@ class F4SETab(CMCTabFrame):
 					)
 					ae = (
 						EMOJI_DLL_INDIE
-						if is_addrindependent_ae or is_structindependent_ae
+						if is_addrindependent_ae and is_structindependent_ae
 						else EMOJI_DLL_GOOD
 						if supports_ae and supports_game
 						else EMOJI_DLL_NOTE
@@ -175,7 +175,7 @@ class F4SETab(CMCTabFrame):
 				elif self.cmc.game.is_foae():
 					cg = (
 						EMOJI_DLL_INDIE
-						if is_addrindependent_ae or is_structindependent_ae
+						if is_addrindependent_ae and is_structindependent_ae
 						else EMOJI_DLL_NOTE
 						if supports_ae and supports_ngae
 						else "\N{CROSS MARK}"
@@ -184,7 +184,7 @@ class F4SETab(CMCTabFrame):
 				elif self.cmc.game.is_fong():
 					cg = (
 						EMOJI_DLL_INDIE
-						if is_addrindependent_ng or is_structindependent_ng
+						if is_addrindependent_ng and is_structindependent_ng
 						else EMOJI_DLL_NOTE
 						if supports_ng and supports_ngae
 						else "\N{CROSS MARK}"
