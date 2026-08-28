@@ -17,6 +17,7 @@
 #
 
 
+from collections import UserDict
 from enum import Enum
 from tkinter import *
 from typing import TYPE_CHECKING
@@ -113,7 +114,7 @@ class ModFiles:
 		self.archives: dict[str, tuple[str, Path]] = {}
 
 
-class ScanSettings(dict[ScanSetting, bool]):
+class ScanSettings(UserDict[ScanSetting, bool]):
 	def __init__(self, side_pane: SidePane) -> None:
 		super().__init__()
 
