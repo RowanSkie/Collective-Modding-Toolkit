@@ -62,7 +62,7 @@ class F4SETab(CMCTabFrame):
 		for dll_file in self.cmc.game.f4se_path.iterdir():
 			if dll_file.suffix.lower() == ".dll" and not dll_file.name.startswith("msdia"):
 				logger.debug("Scanning %s", dll_file.name)
-				self.dll_info[dll_file.name] = f4se_utils.parse_dll(dll_file)
+				self.dll_info[dll_file.name] = f4se_utils.parse_dll(dll_file, self.cmc.game.load_game_version())
 				# TODO: make this actually scan the game
 		return True
 
@@ -148,7 +148,7 @@ class F4SETab(CMCTabFrame):
 				if supports_ngae:
 					ng = (
 						EMOJI_DLL_INDIE
-						if is_addrindependent_ng and is_structindependent_ng
+						if is_addrindependent_ng or is_structindependent_ng
 						else EMOJI_DLL_GOOD
 						if supports_ng and supports_game
 						else EMOJI_DLL_NOTE
@@ -157,7 +157,7 @@ class F4SETab(CMCTabFrame):
 					)
 					ae = (
 						EMOJI_DLL_INDIE
-						if is_addrindependent_ae and is_structindependent_ae
+						if is_addrindependent_ae or is_structindependent_ae
 						else EMOJI_DLL_GOOD
 						if supports_ae and supports_game
 						else EMOJI_DLL_NOTE
@@ -167,17 +167,17 @@ class F4SETab(CMCTabFrame):
 				else:
 					ng = EMOJI_DLL_BAD
 					ae = EMOJI_DLL_BAD
-					# cg = EMOJI_DLL_GOOD if self.cmc.game.is_foog() else EMOJI_DLL_BAD
 
 				cg = "\N{CROSS MARK}"
-				if self.cmc.game.is_foae():
+				if supports_game:
+					cg = EMOJI_DLL_GOOD
+
+				elif self.cmc.game.is_foae():
 					cg = (
 						EMOJI_DLL_INDIE
 						if is_addrindependent_ae or is_structindependent_ae
-						else EMOJI_DLL_GOOD
-						if supports_ae
 						else EMOJI_DLL_NOTE
-						if supports_ngae
+						if supports_ae and supports_ngae
 						else "\N{CROSS MARK}"
 					)
 
@@ -185,10 +185,8 @@ class F4SETab(CMCTabFrame):
 					cg = (
 						EMOJI_DLL_INDIE
 						if is_addrindependent_ng or is_structindependent_ng
-						else EMOJI_DLL_GOOD
-						if supports_ng
 						else EMOJI_DLL_NOTE
-						if supports_ngae
+						if supports_ng and supports_ngae
 						else "\N{CROSS MARK}"
 					)
 

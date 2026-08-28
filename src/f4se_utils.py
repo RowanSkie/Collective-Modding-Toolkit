@@ -221,7 +221,7 @@ class F4SEPluginVersionData(ctypes.Structure):
 		return bool(version in self.compatibleVersions)
 
 	def DeterminateSupportVersion(self):
-		if (self.dataVersion != F4SEPluginVersion.kVersion) or (self.name[0] == ctypes.c_char(b"\x00")):
+		if (self.dataVersion != F4SEPluginVersion.kVersion) or (self.name[0] == b"\x00"):
 			return 0
 
 		result = 0
@@ -233,7 +233,7 @@ class F4SEPluginVersionData(ctypes.Structure):
 		return result
 
 	def IsSupportVersion(self, version: ctypes.c_uint32):
-		if (self.dataVersion != F4SEPluginVersion.kVersion) or (self.name[0] == ctypes.c_char(b"\x00")):
+		if (self.dataVersion != F4SEPluginVersion.kVersion) or (self.name[0] == b"\x00"):
 			return False
 
 		# TODO: check for 'known bad' versions of plugins
@@ -284,7 +284,7 @@ class F4SEPluginVersionData(ctypes.Structure):
 
 ## version requirement for this def is cursed as fuck
 # def parse_dll(file_path: Path, version: ctypes.c_uint32) -> DLLInfo:
-def parse_dll(file_path: Path) -> DLLInfo:
+def parse_dll(file_path: Path, version: ctypes.c_uint32) -> DLLInfo:
 	dll = ctypes.WinDLL(str(file_path), winmode=DONT_RESOLVE_DLL_REFERENCES)
 	dll_info: DLLInfo = {
 		"IsF4SE": hasattr(dll, "F4SEPlugin_Load") or hasattr(dll, "F4SEPlugin_Preload"),
@@ -306,10 +306,7 @@ def parse_dll(file_path: Path) -> DLLInfo:
 			ctypes.POINTER(F4SEPluginVersionData),
 		).contents
 
-		logger.debug("dataVersion: %s", v.dataVersion)
-		logger.debug("pluginVersion: %s", v.pluginVersion)
 		logger.debug("name: %s", v.name)
-		logger.debug("author: %s", v.author)
 		logger.debug("addressIndependence: %s", v.addressIndependence)
 		logger.debug("structureIndependence: %s", v.structureIndependence)
 
@@ -334,7 +331,12 @@ def parse_dll(file_path: Path) -> DLLInfo:
 			# Check known NG versions
 			dll_info["SupportsAE"] = v.IsSupportVersionAE()
 
-		# dll_info["SupportsCurrent"] = v.IsSupportVersion(version)  # this section of the code is cursed
+		logger.debug("SupportsNG: %s", dll_info["SupportsNG"])
+		logger.debug("SupportsAE: %s", dll_info["SupportsAE"])
+
+		# this section of the code is cursed
+		dll_info["SupportsCurrent"] = v.IsSupportVersion(version)
+		logger.debug("SupportsCurrent: %s", dll_info["SupportsCurrent"])
 	return dll_info
 
 
