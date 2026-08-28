@@ -300,7 +300,7 @@ class ScannerTab(CMCTabFrame):
 			return True
 		return False
 
-	def get_stage_paths(self, scan_settings: ScanSettings) -> list[Path]:  # noqa: PLR6301
+	def get_stage_paths(self, scan_settings: ScanSettings) -> list[Path]:  # ruff: ignore[no-self-use]
 		manager = scan_settings.manager
 		if not (manager and manager.stage_path and manager.profiles_path and manager.selected_profile and manager.overwrite_path):
 			msg = (
@@ -520,7 +520,7 @@ class ScannerTab(CMCTabFrame):
 					)
 					continue
 
-				if data_root_lower == "scripts" and current_path.parent == data_path:  # noqa: SIM102
+				if data_root_lower == "scripts" and current_path.parent == data_path:  # ruff: ignore[collapsible-if]
 					if mod_name_file and scan_settings[ScanSetting.ProblemOverrides] and file_lower in F4SE_CRC:
 						problems.append(
 							ProblemInfo(

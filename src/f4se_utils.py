@@ -1,4 +1,5 @@
 # code originally written by perchik71
+# TODO: Fix all the names
 
 import ctypes
 import logging

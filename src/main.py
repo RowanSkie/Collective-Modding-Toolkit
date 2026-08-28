@@ -37,7 +37,7 @@ logger = logging.getLogger()
 start_message = f"Starting {APP_TITLE} v{APP_VERSION}"
 logger.info("-" * len(start_message))
 logger.info("%s", start_message)
-logger.info("%s", datetime.now().strftime("%Y-%m-%d %H:%M"))
+logger.info("%s", datetime.now().strftime("%Y-%m-%d %H:%M"))  # ruff: ignore[call-datetime-now-without-tzinfo]
 
 settings = AppSettings()
 logger.setLevel(settings.dict["log_level"])

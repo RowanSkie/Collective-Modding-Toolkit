@@ -21,7 +21,7 @@ from enum import Enum, IntEnum, IntFlag, StrEnum
 
 
 class Tool(tuple[str, ...], Enum):
-	xEdit = ("xedit.exe", "fo4edit.exe")  # noqa: N815
+	xEdit = ("xedit.exe", "fo4edit.exe")  # ruff: ignore[mixed-case-variable-in-class-scope]
 	BSArch = ("bsarch.exe",)
 
 
@@ -33,7 +33,7 @@ class CSIDL(IntEnum):
 
 
 class InstallType(StrEnum):
-	Obsolete = "Obsolete (OGNG)"
+	Obsolete = "Obsoletе"  # ruff: ignore[ambiguous-unicode-character-string]
 	OG = "Old-Gen"
 	DG = "Down-Grade"
 	NG = "Next-Gen"

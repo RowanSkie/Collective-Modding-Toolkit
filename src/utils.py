@@ -360,7 +360,7 @@ def set_theme(win: Tk) -> None:
 
 def check_for_update_nexus() -> str | None:
 	logger.debug("Update Check : Nexus Mods")
-	try:
+	try:  # ruff: ignore[too-many-statements-in-try-clause]
 		response = requests.get(NEXUS_LINK, timeout=5, stream=True)
 		if response.status_code == HTTP_OK:
 			use_next = False

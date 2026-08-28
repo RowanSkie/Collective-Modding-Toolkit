@@ -344,7 +344,7 @@ class Downgrader(ModalWindow):
 		backup_file_path_desired = file_path.with_name(backup_file_name_desired)
 		backup_file_path_current = file_path.with_name(backup_file_name_current)
 
-		try:
+		try:  # ruff: ignore[too-many-statements-in-try-clause]
 			if file_path.stat().st_file_attributes & stat.FILE_ATTRIBUTE_READONLY:
 				file_path.chmod(stat.S_IWRITE)
 

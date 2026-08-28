@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AutoFixResult:
+class AutoFixResult:  # ruff: ignore[class-as-data-structure]
 	def __init__(self, *, success: bool, details: str) -> None:
 		self.success = success
 		self.details = details

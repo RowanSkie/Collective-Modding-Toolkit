@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 SETTINGS_PATH = Path("settings.json")
 
 source_path = get_asset_path("download-source.txt")
-try:
+try:  # ruff: ignore[too-many-statements-in-try-clause]
 	download_source = source_path.read_text("utf-8", "ignore").strip()
 	if download_source not in {"nexus", "github"}:
 		logger.error("Settings : Invalid download source: '%s'", download_source)
@@ -84,7 +84,7 @@ class AppSettings:
 			json_content: AppSettingsDict = json.loads(SETTINGS_PATH.read_text("utf-8"))
 			if not isinstance(json_content, dict):  # type: ignore[reportUnnecessaryIsInstance]
 				# File doesn't contain a JSON Object
-				raise ValueError  # noqa: TRY004
+				raise ValueError  # ruff: ignore[type-check-without-type-error]
 		except:
 			logger.exception("Settings : Failed to load %s. Settings will be reset.", SETTINGS_PATH.name)
 			resave = True
