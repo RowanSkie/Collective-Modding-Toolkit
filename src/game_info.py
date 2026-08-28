@@ -25,6 +25,8 @@ from tkinter import *
 from tkinter import filedialog, messagebox
 from typing import TYPE_CHECKING, Literal
 
+import win32api
+
 import f4se_utils
 from enums import CSIDL, InstallType, Language
 from utils import (
@@ -295,6 +297,19 @@ class GameInfo:
 	def is_fodg(self) -> bool:
 		return self._install_type == InstallType.DG
 
+	# TODO: Check for the game version
+	# Make sure it returns three c_uint32s (major, minor, build)
+	# MAKE_EXE_VERSION will handle the rest
+	# def load_game_version(self) -> c_uint32:
+	# 	# self.game_version = f4se_utils.MAKE_EXE_VERSION(X,Y,Z)
+	# 	self.game_version = f4se_utils.RUNTIME_VERSION_1_11_240
+	# 	return self.game_version
+
 	def load_game_version(self) -> c_uint32:
-		self.game_version = f4se_utils.RUNTIME_VERSION_1_11_240
+		info = win32api.GetFileVersionInfo(str(self.game_path / "Fallout4.exe"), "\\")
+		x = info["FileVersionMS"] >> 16
+		y = info["FileVersionMS"] & 0xFFFF
+		z = info["FileVersionLS"] >> 16
+		a = info["FileVersionLS"] & 0xFFFF
+		self.game_version = f4se_utils.MAKE_EXE_VERSION_EX(x, y, z, a)
 		return self.game_version
