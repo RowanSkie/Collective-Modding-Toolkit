@@ -176,8 +176,10 @@ class F4SETab(CMCTabFrame):
 					cg = (
 						EMOJI_DLL_INDIE
 						if is_addrindependent_ae and is_structindependent_ae
+						else EMOJI_DLL_GOOD
+						if supports_ng
 						else EMOJI_DLL_NOTE
-						if supports_ae and supports_ngae
+						if supports_ngae
 						else "\N{CROSS MARK}"
 					)
 
@@ -185,8 +187,10 @@ class F4SETab(CMCTabFrame):
 					cg = (
 						EMOJI_DLL_INDIE
 						if is_addrindependent_ng and is_structindependent_ng
+						else EMOJI_DLL_GOOD
+						if supports_ae
 						else EMOJI_DLL_NOTE
-						if supports_ng and supports_ngae
+						if supports_ngae
 						else "\N{CROSS MARK}"
 					)
 
