@@ -1,4 +1,4 @@
-package require Tk 8.6
+package require Tk 8.6-
 
 source [file join [file dirname [info script]] theme dark.tcl]
 
@@ -31,7 +31,7 @@ proc config_entry_font {w} {
 
 
 proc config_menus {w} {
-  if {[tk windowingsystem] in {"aqua" "win32"}} {
+  if {[tk windowingsystem] in {"aqua","win32"}} {
     return
   }
 
@@ -45,9 +45,10 @@ proc config_menus {w} {
       -activebackground $ttk::theme::sv_dark::colors(-selbg) \
       -activeforeground $ttk::theme::sv_dark::colors(-selfg) \
       -selectcolor $ttk::theme::sv_dark::colors(-selfg)
-    if {[[winfo toplevel $w] cget -menu] != $w} {
-      $w configure -borderwidth 0 -background $ttk::theme::sv_dark::colors(-bg)
-    }
+  }
+
+  if {[[winfo toplevel $w] cget -menu] != $w} {
+    $w configure -borderwidth 0 -background $ttk::theme::sv_dark::colors(-bg)
   }
 }
 
