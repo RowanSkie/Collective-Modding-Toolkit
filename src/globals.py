@@ -228,7 +228,7 @@ Both Creation Kit and the game require steam_api64.dll to match their version, s
 ABOUT_F4SE_DLLS = """This checks all DLLs in
 Data/F4SE/Plugins/ for
 version-specific code to
-determine OG/NG support.
+determine OG/NG/AE support.
 
 \N{HEAVY CHECK MARK} Version is supported
 
