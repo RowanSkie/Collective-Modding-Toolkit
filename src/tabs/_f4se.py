@@ -173,22 +173,10 @@ class F4SETab(CMCTabFrame):
 					cg = EMOJI_DLL_GOOD
 
 				elif self.cmc.game.is_foae():
-					cg = (
-						EMOJI_DLL_INDIE
-						if is_addrindependent_ae and is_structindependent_ae
-						else EMOJI_DLL_NOTE
-						if supports_ae and supports_ngae
-						else "\N{CROSS MARK}"
-					)
+					cg = EMOJI_DLL_INDIE if is_addrindependent_ae and is_structindependent_ae else "\N{CROSS MARK}"
 
 				elif self.cmc.game.is_fong():
-					cg = (
-						EMOJI_DLL_INDIE
-						if is_addrindependent_ng and is_structindependent_ng
-						else EMOJI_DLL_NOTE
-						if supports_ng and supports_ngae
-						else "\N{CROSS MARK}"
-					)
+					cg = EMOJI_DLL_INDIE if is_addrindependent_ng and is_structindependent_ng else "\N{CROSS MARK}"
 
 				elif self.cmc.game.is_foog():
 					cg = EMOJI_DLL_GOOD if info.get("SupportsOG") else "\N{CROSS MARK}"
