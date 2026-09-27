@@ -15,31 +15,31 @@ if typing.TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def MAKE_EXE_VERSION_EX(major: int, minor: int, build: int, sub: int):
+def MAKE_EXE_VERSION_EX(major: int, minor: int, build: int, sub: int):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 	result = ((major & 0xFF) << 24) | ((minor & 0xFF) << 16) | ((build & 0xFFF) << 4) | (sub & 0xF)
 	return ctypes.c_uint32(result).value
 
 
-def MAKE_EXE_VERSION(major: int, minor: int, build: int):
+def MAKE_EXE_VERSION(major: int, minor: int, build: int):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 	return MAKE_EXE_VERSION_EX(major, minor, build, 0)
 
 
-def GET_EXE_VERSION_MAJOR(a):
+def GET_EXE_VERSION_MAJOR(a):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function, missing-type-function-argument]
 	val = ctypes.c_uint32(a).value
 	return (val & 0xFF000000) >> 24
 
 
-def GET_EXE_VERSION_MINOR(a):
+def GET_EXE_VERSION_MINOR(a):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function, missing-type-function-argument]
 	val = ctypes.c_uint32(a).value
 	return (val & 0x00FF0000) >> 16
 
 
-def GET_EXE_VERSION_BUILD(a):
+def GET_EXE_VERSION_BUILD(a):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function, missing-type-function-argument]
 	val = ctypes.c_uint32(a).value
 	return (val & 0x0000FFF0) >> 4
 
 
-def GET_EXE_VERSION_SUB(a):
+def GET_EXE_VERSION_SUB(a):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function, missing-type-function-argument]
 	val = ctypes.c_uint32(a).value
 	return (val & 0x0000000F) >> 0
 
@@ -112,46 +112,46 @@ RUNTIME_VERSION_AE_LATEST = RUNTIME_VERSION_1_11_240
 
 
 class VersionSupport(IntFlag):
-	kVersionSupportOG = (1,)
-	kVersionSupportNG = (2,)
-	kVersionSupportAE = (4,)
+	kVersionSupportOG = (1,)  # ruff: ignore[mixed-case-variable-in-class-scope]
+	kVersionSupportNG = (2,)  # ruff: ignore[mixed-case-variable-in-class-scope]
+	kVersionSupportAE = (4,)  # ruff: ignore[mixed-case-variable-in-class-scope]
 
 
 class F4SEPluginVersion(IntFlag):
-	kVersion = 1
+	kVersion = 1  # ruff: ignore[mixed-case-variable-in-class-scope]
 
 
 class F4SEPluginAddressIndependence(IntFlag):
 	# set this if you exclusively use signature matching to find your addresses and have NO HARDCODED ADDRESSES
 	# the F4SE code does not use signature matching, so calling functions in the F4SE headers is not safe with this flag
-	kAddressIndependence_Signatures = 1  # 0b001
+	kAddressIndependence_Signatures = 1  # 0b001  # ruff: ignore[mixed-case-variable-in-class-scope]
 	# set this if you are using a 1.10.980+ version of the Address Library
-	kAddressIndependence_AddressLibrary_1_10_980 = 2  # 0b010
+	kAddressIndependence_AddressLibrary_1_10_980 = 2  # 0b010  # ruff: ignore[mixed-case-variable-in-class-scope]
 	# set this if you are using a 1.11.137+ version of the Address Library
-	kAddressIndependence_AddressLibrary_1_11_137 = 4  # 0b100
+	kAddressIndependence_AddressLibrary_1_11_137 = 4  # 0b100  # ruff: ignore[mixed-case-variable-in-class-scope]
 
 
 class F4SEPluginStructureIndependence(IntFlag):
 	# set this if your plugin doesn't use any game structures
-	kStructureIndependence_NoStructs = 1  # 0b001
+	kStructureIndependence_NoStructs = 1  # 0b001  # ruff: ignore[mixed-case-variable-in-class-scope]
 	# works with the structure layout in 1.10.980+
-	kStructureIndependence_1_10_980Layout = 2  # 0b010
+	kStructureIndependence_1_10_980Layout = 2  # 0b010  # ruff: ignore[mixed-case-variable-in-class-scope]
 	# works with the structure layout in 1.11.137+
-	kStructureIndependence_1_11_137Layout = 4  # 0b100
+	kStructureIndependence_1_11_137Layout = 4  # 0b100  # ruff: ignore[mixed-case-variable-in-class-scope]
 
 
 ArrayCompatibleVersion = ctypes.c_uint32 * 16
 
 
-def F4SEPlugin_IsAE(version: ctypes.c_uint32):
+def F4SEPlugin_IsAE(version: ctypes.c_uint32):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 	return version >= RUNTIME_VERSION_1_11_137
 
 
-def F4SEPlugin_IsNG(version: ctypes.c_uint32):
+def F4SEPlugin_IsNG(version: ctypes.c_uint32):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 	return (version >= RUNTIME_VERSION_1_10_980) and (version <= RUNTIME_VERSION_1_10_984)
 
 
-def F4SEPlugin_IsOG(version: ctypes.c_uint32):
+def F4SEPlugin_IsOG(version: ctypes.c_uint32):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 	return version == RUNTIME_VERSION_OG_LATEST
 
 
@@ -182,46 +182,46 @@ class F4SEPluginVersionData(ctypes.Structure):
 		("reserved", ctypes.c_uint8 * 512),
 	]
 
-	def HasSupportAddressLibraryAE(self):
+	def HasSupportAddressLibraryAE(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		return bool(
 			F4SEPluginAddressIndependence(self.addressIndependence)
-			& F4SEPluginAddressIndependence.kAddressIndependence_AddressLibrary_1_11_137
+			& F4SEPluginAddressIndependence.kAddressIndependence_AddressLibrary_1_11_137,
 		)
 
-	def HasSupportAddressLibraryNG(self):
+	def HasSupportAddressLibraryNG(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		return bool(
 			F4SEPluginAddressIndependence(self.addressIndependence)
-			& F4SEPluginAddressIndependence.kAddressIndependence_AddressLibrary_1_10_980
+			& F4SEPluginAddressIndependence.kAddressIndependence_AddressLibrary_1_10_980,
 		)
 
-	def HasSupportSignatureScanning(self):
+	def HasSupportSignatureScanning(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		return bool(
 			F4SEPluginAddressIndependence(self.addressIndependence)
-			& F4SEPluginAddressIndependence.kAddressIndependence_Signatures
+			& F4SEPluginAddressIndependence.kAddressIndependence_Signatures,
 		)
 
-	def HasSupportStructureIndependenceAE(self):
+	def HasSupportStructureIndependenceAE(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		return bool(
 			F4SEPluginStructureIndependence(self.structureIndependence)
-			& F4SEPluginStructureIndependence.kStructureIndependence_1_11_137Layout
+			& F4SEPluginStructureIndependence.kStructureIndependence_1_11_137Layout,
 		)
 
-	def HasSupportStructureIndependenceNG(self):
+	def HasSupportStructureIndependenceNG(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		return bool(
 			F4SEPluginStructureIndependence(self.structureIndependence)
-			& F4SEPluginStructureIndependence.kStructureIndependence_1_10_980Layout
+			& F4SEPluginStructureIndependence.kStructureIndependence_1_10_980Layout,
 		)
 
-	def HasSupportNoStructureIndependence(self):
+	def HasSupportNoStructureIndependence(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		return bool(
 			F4SEPluginStructureIndependence(self.structureIndependence)
-			& F4SEPluginStructureIndependence.kStructureIndependence_NoStructs
+			& F4SEPluginStructureIndependence.kStructureIndependence_NoStructs,
 		)
 
-	def HasCompatibleCurrentVersion(self, version: ctypes.c_uint32):
+	def HasCompatibleCurrentVersion(self, version: ctypes.c_uint32):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		return bool(version in self.compatibleVersions)
 
-	def DeterminateSupportVersion(self):
+	def DeterminateSupportVersion(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		if (self.dataVersion != F4SEPluginVersion.kVersion) or (self.name[0] == b"\x00"):
 			return 0
 
@@ -233,41 +233,41 @@ class F4SEPluginVersionData(ctypes.Structure):
 
 		return result
 
-	def IsSupportVersion(self, version: ctypes.c_uint32):
+	def IsSupportVersion(self, version: ctypes.c_uint32) -> bool:  # ruff: ignore[invalid-function-name]
 		if (self.dataVersion != F4SEPluginVersion.kVersion) or (self.name[0] == b"\x00"):
 			return False
 
 		# TODO: check for 'known bad' versions of plugins
 
-		hasAddressIndependence = False
-		hasStructureIndependence = False
+		hasAddressIndependence = False  # ruff: ignore[non-lowercase-variable-in-function]
+		hasStructureIndependence = False  # ruff: ignore[non-lowercase-variable-in-function]
 
 		if F4SEPlugin_IsAE(version):
-			hasAddressIndependence = self.HasSupportAddressLibraryAE() or self.HasSupportSignatureScanning()
-			hasStructureIndependence = self.HasSupportStructureIndependenceAE() or self.HasSupportNoStructureIndependence()
+			hasAddressIndependence = self.HasSupportAddressLibraryAE() or self.HasSupportSignatureScanning()  # ruff: ignore[non-lowercase-variable-in-function]
+			hasStructureIndependence = self.HasSupportStructureIndependenceAE() or self.HasSupportNoStructureIndependence()  # ruff: ignore[non-lowercase-variable-in-function]
 			# print("AE ", hasAddressIndependence, hasStructureIndependence)
 		elif F4SEPlugin_IsNG(version):
-			hasAddressIndependence = self.HasSupportAddressLibraryNG() or self.HasSupportSignatureScanning()
-			hasStructureIndependence = self.HasSupportStructureIndependenceNG() or self.HasSupportNoStructureIndependence()
+			hasAddressIndependence = self.HasSupportAddressLibraryNG() or self.HasSupportSignatureScanning()  # ruff: ignore[non-lowercase-variable-in-function]
+			hasStructureIndependence = self.HasSupportStructureIndependenceNG() or self.HasSupportNoStructureIndependence()  # ruff: ignore[non-lowercase-variable-in-function]
 			# print("NG", hasAddressIndependence, hasStructureIndependence)
 
-		hasVersionIndependent = hasAddressIndependence and hasStructureIndependence
+		hasVersionIndependent = hasAddressIndependence and hasStructureIndependence  # ruff: ignore[non-lowercase-variable-in-function]
 
 		# currently anything in the "breaking change" field means that compatibility has been broken by an update
 		if self.reservedBreaking > 0:
-			hasVersionIndependent = False
+			hasVersionIndependent = False  # ruff: ignore[non-lowercase-variable-in-function]
 
 		# check al exist lol
 
 		# simple version list
 		return not (not hasVersionIndependent and not self.HasCompatibleCurrentVersion(version))
 
-	def IsSupportVersionNG(self):
+	def IsSupportVersionNG(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		# evildarkarchon: fixed more pythonic
 		result = (self.IsSupportVersion(n) for n in (RUNTIME_VERSION_1_10_980, RUNTIME_VERSION_1_10_984))
 		return bool(result)
 
-	def IsSupportVersionAE(self):
+	def IsSupportVersionAE(self):  # ruff: ignore[invalid-function-name, missing-return-type-undocumented-public-function]
 		# evildarkarchon: fixed more pythonic
 		result = (
 			self.IsSupportVersion(n)
