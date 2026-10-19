@@ -132,13 +132,15 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.10.943.1": InstallType.Obsolete,
 		"1.10.982.3": InstallType.NG,
 		"1.11.137.0": InstallType.Obsolete,
-		"1.11.240.0": InstallType.AE2,
+		"1.11.240.0": InstallType.Obsolete,
+		"1.11.246.0": InstallType.AE2,
 	},
 	"Tools\\Archive2\\Archive2.exe": {
 		"4CDFC7B5": InstallType.OG,
 		"71A5240B": InstallType.NG,
 		"C867674F": InstallType.Obsolete,
-		"9A059211": InstallType.AE2,
+		"9A059211": InstallType.Obsolete,
+		"B2EEF34A": InstallType.AE2,
 	},
 }
 
