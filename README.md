@@ -4,7 +4,7 @@ Custom CMT fork by RowanSkie to fix AE shenanigans + BA2 limits.
 
 ## Building
 
-1. Install Python 3.14
+1. Install Python 3.14.6
 2. Generate a virtual environment via this command : `python -m venv .venv`
 3. Activate virtual environment.
 4. Install the dependencies via this command : `pip install -r requirements.txt`
