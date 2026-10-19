@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
+# Copyright (C) 2024, 2025  wxMichael
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ class PCInfo:
 	def _get_gpu() -> tuple[str, int]:
 		gpu_model = "Unknown GPU"
 		gpu_memory = 0
-		try:
+		try:  # ruff: ignore[too-many-statements-in-try-clause]
 			with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, R"HARDWARE\DEVICEMAP\VIDEO") as key:
 				video_device, value_type = winreg.QueryValueEx(key, R"\Device\Video0")
 			if value_type == winreg.REG_SZ and isinstance(video_device, str):
@@ -156,14 +156,14 @@ class CMCTabFrame(ttk.Frame, ABC):
 		self.loading_error: str | None = None
 		self.label_loading: ttk.Label | None = None
 
-	def _load(self) -> bool:  # noqa: PLR6301
+	def _load(self) -> bool:  # ruff: ignore[no-self-use]
 		"""Load any data needed for this tab. Return False on failure."""
 		return True
 
-	def switch_from(self) -> None:  # noqa: PLR6301
+	def switch_from(self) -> None:  # ruff: ignore[no-self-use]
 		return
 
-	def _switch_to(self) -> None:  # noqa: PLR6301
+	def _switch_to(self) -> None:  # ruff: ignore[no-self-use]
 		return
 
 	@abstractmethod
@@ -231,8 +231,10 @@ class DLLInfo(TypedDict):
 	SupportsNGAE: bool
 	SupportsNG: bool | None
 	SupportsAE: bool | None
-	AddrIndependent: bool | None
-	StructIndependent: bool | None
+	AddrIndependentNG: bool | None
+	AddrIndependentAE: bool | None
+	StructIndependentNG: bool | None
+	StructIndependentAE: bool | None
 	SupportsCurrent: bool | None
 
 

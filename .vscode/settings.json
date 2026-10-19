@@ -233,5 +233,6 @@
       "fileMatch": ["**/modinfo.json", "**/assets/**/modinfo.json"],
       "url": "https://raw.githubusercontent.com/SirNoName2705/VintelliSchemas/master/SchemaReleases/current/.schemas/modinfo.json"
     }
-  ]
+  ],
+  "python-envs.defaultEnvManager": "ms-python.python:venv"
 }

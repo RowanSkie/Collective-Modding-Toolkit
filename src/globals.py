@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
+# Copyright (C) 2024, 2025  wxMichael
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ MAX_ARCHIVES_GNRL_AE = 1024
 MAX_ARCHIVES_DX10_AE = 1023
 
 COLOR_DEFAULT = "#CACACA"
-COLOR_GOOD = "#619267"
+COLOR_GOOD = "green2"
 COLOR_BAD = "#AF5A66"
 COLOR_INFO = "dodger blue"
 COLOR_NEUTRAL_1 = "gray"
@@ -132,13 +132,15 @@ BASE_FILES: dict[str, dict[str, InstallType]] = {
 		"1.10.943.1": InstallType.Obsolete,
 		"1.10.982.3": InstallType.NG,
 		"1.11.137.0": InstallType.Obsolete,
-		"1.11.240.0": InstallType.AE2,
+		"1.11.240.0": InstallType.Obsolete,
+		"1.11.246.0": InstallType.AE2,
 	},
 	"Tools\\Archive2\\Archive2.exe": {
 		"4CDFC7B5": InstallType.OG,
 		"71A5240B": InstallType.NG,
 		"C867674F": InstallType.Obsolete,
-		"9A059211": InstallType.AE2,
+		"9A059211": InstallType.Obsolete,
+		"B2EEF34A": InstallType.AE2,
 	},
 }
 
@@ -228,7 +230,7 @@ Both Creation Kit and the game require steam_api64.dll to match their version, s
 ABOUT_F4SE_DLLS = """This checks all DLLs in
 Data/F4SE/Plugins/ for
 version-specific code to
-determine OG/NG support.
+determine OG/NG/AE support.
 
 \N{HEAVY CHECK MARK} Version is supported
 

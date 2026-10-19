@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
+# Copyright (C) 2024, 2025  wxMichael
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AutoFixResult:
+class AutoFixResult:  # ruff: ignore[class-as-data-structure]
 	def __init__(self, *, success: bool, details: str) -> None:
 		self.success = success
 		self.details = details

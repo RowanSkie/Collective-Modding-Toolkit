@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
+# Copyright (C) 2024, 2025  wxMichael
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,9 +21,9 @@ import logging
 from tkinter import *
 from tkinter import ttk
 
+import f4se_utils
 from globals import *
 from helpers import CMCheckerInterface, CMCTabFrame, DLLInfo
-from utils import parse_dll
 
 TAG_NEUTRAL = "neutral"
 TAG_GOOD = "good"
@@ -62,8 +62,8 @@ class F4SETab(CMCTabFrame):
 		for dll_file in self.cmc.game.f4se_path.iterdir():
 			if dll_file.suffix.lower() == ".dll" and not dll_file.name.startswith("msdia"):
 				logger.debug("Scanning %s", dll_file.name)
-				self.dll_info[dll_file.name] = parse_dll(dll_file)
-
+				self.dll_info[dll_file.name] = f4se_utils.parse_dll(dll_file, self.cmc.game.load_game_version())
+				# TODO: make this actually scan the game
 		return True
 
 	def _build_gui(self) -> None:
@@ -139,64 +139,47 @@ class F4SETab(CMCTabFrame):
 				supports_ngae = info.get("SupportsNGAE")
 				supports_ng = info.get("SupportsNG")
 				supports_ae = info.get("SupportsAE")
-				is_addrindependent = info.get("AddrIndependent")
-				is_structindependent = info.get("StructIndependent")
+				supports_game = info.get("SupportsCurrent")
+				is_addrindependent_ng = info.get("AddrIndependentNG")
+				is_structindependent_ng = info.get("StructIndependentNG")
+				is_addrindependent_ae = info.get("AddrIndependentAE")
+				is_structindependent_ae = info.get("StructIndependentAE")
 
 				if supports_ngae:
 					ng = (
 						EMOJI_DLL_INDIE
-						if is_structindependent and is_addrindependent
-						else EMOJI_DLL_NOTE
-						if supports_ng is None
+						if is_addrindependent_ng and is_structindependent_ng
 						else EMOJI_DLL_GOOD
+						if supports_ng and supports_game
+						else EMOJI_DLL_NOTE
 						if supports_ng
 						else EMOJI_DLL_BAD
 					)
 					ae = (
 						EMOJI_DLL_INDIE
-						if is_structindependent and is_addrindependent
-						else EMOJI_DLL_NOTE
-						if supports_ae is None
+						if is_addrindependent_ae and is_structindependent_ae
 						else EMOJI_DLL_GOOD
+						if supports_ae and supports_game
+						else EMOJI_DLL_NOTE
 						if supports_ae
 						else EMOJI_DLL_BAD
 					)
 				else:
 					ng = EMOJI_DLL_BAD
 					ae = EMOJI_DLL_BAD
-					# cg = EMOJI_DLL_GOOD if self.cmc.game.is_foog() else EMOJI_DLL_BAD
 
 				cg = "\N{CROSS MARK}"
-				if self.cmc.game.is_foae():
-					cg = (
-						EMOJI_DLL_INDIE
-						if is_addrindependent and is_structindependent
-						else EMOJI_DLL_GOOD
-						if supports_ae
-						else EMOJI_DLL_NOTE
-						if supports_ngae
-						else "\N{CROSS MARK}"
-					)
-
-				elif self.cmc.game.is_fong():
-					cg = (
-						EMOJI_DLL_INDIE
-						if is_addrindependent and is_structindependent
-						else EMOJI_DLL_GOOD
-						if supports_ng
-						else EMOJI_DLL_NOTE
-						if supports_ngae
-						else "\N{CROSS MARK}"
-					)
-
+				if self.cmc.game.is_fongae():
+					if supports_game:
+						cg = EMOJI_DLL_GOOD
+					elif self.cmc.game.is_foae():
+						cg = EMOJI_DLL_INDIE if is_addrindependent_ae and is_structindependent_ae else "\N{CROSS MARK}"
+					elif self.cmc.game.is_fong():
+						cg = EMOJI_DLL_INDIE if is_addrindependent_ng and is_structindependent_ng else "\N{CROSS MARK}"
+					else:
+						cg = EMOJI_DLL_NOTE
 				elif self.cmc.game.is_foog():
-					cg = (
-						EMOJI_DLL_INDIE
-						if is_addrindependent and is_structindependent
-						else EMOJI_DLL_GOOD
-						if info.get("SupportsOG")
-						else "\N{CROSS MARK}"
-					)
+					cg = EMOJI_DLL_GOOD if info.get("SupportsOG") else "\N{CROSS MARK}"
 
 				values = [og, ng, ae, cg]
 				tag = (

@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
+# Copyright (C) 2024, 2025  wxMichael
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,7 +16,6 @@
 # along with this program; if not, see <https://www.gnu.org/licenses/>.
 #
 
-
 import logging
 import os
 import sys
@@ -26,6 +25,9 @@ from tkinter import *
 from tkinter import filedialog, messagebox
 from typing import TYPE_CHECKING, Literal
 
+import win32api
+
+import f4se_utils
 from enums import CSIDL, InstallType, Language
 from utils import (
 	find_mod_manager,
@@ -37,6 +39,8 @@ from utils import (
 )
 
 if TYPE_CHECKING:
+	import ctypes
+
 	from helpers import FileInfo
 	from mod_manager_info import ModManagerInfo
 
@@ -50,6 +54,7 @@ class GameInfo:
 		self._game_path_sv = game_path_sv
 		self.name: Literal["Fallout4"]
 		self.install_type = InstallType.Unknown
+		self.game_version: ctypes.c_uint32
 		self._game_path: Path
 		self._data_path: Path | None = None
 		self._f4se_path: Path | None = None
@@ -291,3 +296,20 @@ class GameInfo:
 
 	def is_fodg(self) -> bool:
 		return self._install_type == InstallType.DG
+
+	# TODO: Check for the game version
+	# Make sure it returns three c_uint32s (major, minor, build)
+	# MAKE_EXE_VERSION will handle the rest
+	# def load_game_version(self) -> c_uint32:
+	# 	# self.game_version = f4se_utils.MAKE_EXE_VERSION(X,Y,Z)
+	# 	self.game_version = f4se_utils.RUNTIME_VERSION_1_11_240
+	# 	return self.game_version
+
+	def load_game_version(self) -> c_uint32:
+		info = win32api.GetFileVersionInfo(str(self.game_path / "Fallout4.exe"), "\\")
+		x = info["FileVersionMS"] >> 16
+		y = info["FileVersionMS"] & 0xFFFF
+		z = info["FileVersionLS"] >> 16
+		a = info["FileVersionLS"] & 0xFFFF
+		self.game_version = f4se_utils.MAKE_EXE_VERSION_EX(x, y, z, a)
+		return self.game_version

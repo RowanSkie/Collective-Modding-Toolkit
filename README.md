@@ -4,7 +4,11 @@ Custom CMT fork by RowanSkie to fix AE shenanigans + BA2 limits.
 
 ## Building
 
-`uv run pyinstaller -i src/icon.ico -w --onefile --clean -p src/sv_ttk -p src/patcher --add-data src/assets:assets src/main.py `
+1. Install Python 3.14
+2. Generate a virtual environment via this command : `python -m venv .venv`
+3. Activate virtual environment.
+4. Install the dependencies via this command : `pip install -r requirements.txt`
+5. Install uv, then run this command: `uv run pyinstaller -i src/icon.ico -w --onedir --clean -p src/sv_ttk -p src/patcher --add-data src/assets:assets src/main.py`
 
 Original Readme below.
 

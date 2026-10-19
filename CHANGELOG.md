@@ -1,10 +1,11 @@
 # Changelog
 
-## [0.6.2] - ####-##-##
+## [0.6.2] - ####-##-## - RowanSkie's Fork
 
 ### Added
 
 - Support for Anniversary Edition 1.11.221 and 1.11.240
+- Proper F4SE mod detection thanks to perchik71 and evildarkarchon
 
 ### Changed
 

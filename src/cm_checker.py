@@ -1,6 +1,6 @@
 #
 # Collective Modding Toolkit
-# Copyright (C) 2024, 2025  wxMichael, 2026 RowanSkie
+# Copyright (C) 2024, 2025  wxMichael
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@ class CMChecker(CMCheckerInterface):
 	def setup_window(self) -> None:
 		self.root.wm_resizable(width=False, height=False)
 		self.root.wm_attributes("-fullscreen", "false")
-		self.root.wm_iconphoto(True, self.get_image("images/icon-32.png"))  # noqa: FBT003
+		self.root.wm_iconphoto(True, self.get_image("images/icon-32.png"))  # ruff: ignore[boolean-positional-value-in-call]
 		self.root.wm_title(f"{APP_TITLE} v{APP_VERSION}")
 		self.root.wm_protocol("WM_DELETE_WINDOW", self.on_close)
 
