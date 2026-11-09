@@ -32,12 +32,13 @@ from typing import TYPE_CHECKING, ClassVar, Literal, overload
 
 import chardet
 import requests
+import sv_ttk
 import win32api
 from packaging.version import InvalidVersion, Version
 from psutil import Process
+from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
 
-import sv_ttk
-from globals import APP_VERSION, COLOR_DEFAULT, FONT, FONT_SMALL, NEXUS_LINK
+from globals import APP_VERSION, COLOR_DEFAULT, FONT, FONT_SMALL, NEXUS_LINK, scale, set_ui_scale
 from mod_manager_info import ModManagerInfo
 
 if TYPE_CHECKING:
@@ -52,7 +53,7 @@ logger = logging.getLogger(__name__)
 
 DONT_RESOLVE_DLL_REFERENCES = 0x00000001
 HTTP_OK = 200
-KEY_CTRL = 12
+STATE_CONTROL_MASK = 0x0004
 
 win11_24h2 = sys.getwindowsversion().build >= 26100
 
@@ -83,7 +84,7 @@ def rglob(path: Path, ext: str) -> Generator[Path]:
 	ext = ext.lower()
 	for root, _, files in path.walk():
 		for file in files:
-			if file.lower().endswith(f"*.{ext}"):
+			if file.lower().endswith(f".{ext}"):
 				yield root / file
 
 
@@ -152,6 +153,22 @@ def read_text_encoded(file_path: Path) -> tuple[str, str]:
 	return file_bytes.decode(encoding), encoding
 
 
+def enable_dpi_awareness() -> None:
+	try:
+		windll.shcore.SetProcessDpiAwareness(1)  # System DPI aware
+	except AttributeError, OSError:
+		try:
+			windll.user32.SetProcessDPIAware()
+		except AttributeError, OSError:
+			logger.debug("Could not enable DPI awareness")
+
+
+def apply_dpi_scaling(root: Tk) -> None:
+	dpi = root.winfo_fpixels("1i")
+	root.tk.call("tk", "scaling", dpi / 72)
+	set_ui_scale(dpi / 96)
+
+
 def load_font(font_path: str) -> None:
 	# https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-addfontresourceexw
 	# FR_PRIVATE = 0x10
@@ -204,7 +221,7 @@ def get_asset_path(relative_path: str) -> Path:
 
 def block_text_input(event: Event[Text]) -> str | None:
 	# Block all input except CTRL+A / CTRL+C
-	if event.state == KEY_CTRL and event.keysym in "AC":
+	if int(event.state) & STATE_CONTROL_MASK and event.keysym.lower() in {"a", "c"}:
 		return None
 	return "break"
 
@@ -298,6 +315,15 @@ def get_registry_value(key: int, subkey: str, value_name: str) -> str | None:
 	return None
 
 
+def add_tooltip(widget: Misc, msg: str) -> None:
+	def on_first_enter(event: Event[Misc]) -> None:
+		widget.unbind("<Enter>", func_id)
+		tip = ToolTip(widget, msg)  # ty: ignore[invalid-argument-type]
+		tip.on_enter(event)
+
+	func_id = widget.bind("<Enter>", on_first_enter, "+")
+
+
 def copy_text(widget: ttk.Widget, text: str) -> None:
 	widget.clipboard_clear()
 	widget.clipboard_append(text)
@@ -314,9 +340,9 @@ def copy_text_button(button: ttk.Button, text: str) -> None:
 def add_separator(master: Misc, orient: Literal["horizontal", "vertical"], column: int, row: int, span: int) -> None:
 	separator = ttk.Separator(master, orient=orient)
 	if orient == HORIZONTAL:
-		separator.grid(column=column, row=row, columnspan=span, padx=10, pady=10, ipady=1, sticky=EW)
+		separator.grid(column=column, row=row, columnspan=span, padx=scale(10), pady=scale(10), ipady=scale(1), sticky=EW)
 	else:
-		separator.grid(column=column, row=row, rowspan=span, padx=10, pady=10, ipadx=1, sticky=NS)
+		separator.grid(column=column, row=row, rowspan=span, padx=scale(10), pady=scale(10), ipadx=scale(1), sticky=NS)
 
 
 def set_titlebar_style(window: Misc) -> None:
@@ -326,10 +352,39 @@ def set_titlebar_style(window: Misc) -> None:
 	windll.dwmapi.DwmSetWindowAttribute(hwnd, 20, byref(c_int(1)), sizeof(c_int))
 
 
+def apply_green_accent(win: Tk) -> None:
+	"""Recolor sv_ttk's blue accent to green."""
+	sprite_sheet = get_asset_path("sv_ttk/spritesheet_dark_green.png").absolute().as_posix()
+	win.tk.eval(
+		f"""
+		set ns ttk::theme::sv_dark
+		array set ${{ns}}::colors {{-selbg "#05b62e" -accent "#57ff64"}}
+		image create photo sv_green_sheet -file {{{sprite_sheet}}} -format png
+		foreach {{name x y w h}} $::spriteinfo {{
+			[set ${{ns}}::I($name)] copy sv_green_sheet -from $x $y [expr {{$x+$w}}] [expr {{$y+$h}}] -compositingrule set
+		}}
+		ttk::style map Accent.TButton -foreground [list pressed "#252525" disabled "#a5a5a5"]
+		ttk::style map Toggle.TButton -foreground [list {{selected disabled}} "#a5a5a5" {{selected pressed}} "#d0d0d0" selected "#000000" pressed "#252525" disabled "#7a7a7a"]
+		rename configure_colors sv_configure_colors
+		proc configure_colors {{}} {{
+			if {{![info exists ::sv_colors_configured]}} {{
+				set ::sv_colors_configured 1
+				sv_configure_colors
+			}}
+		}}
+		configure_colors
+		"""
+	)
+
+
 def set_theme(win: Tk) -> None:
 	set_titlebar_style(win)
-	sv_ttk.apply_dark_theme()
+	sv_ttk.set_theme("dark", win)
+	apply_green_accent(win)
 	style = ttk.Style(win)
+
+	style.layout("TNotebook", [("Notebook.background", {"children": [("TNotebook.Tab", {"sticky": NSEW})]})])
+	style.configure("TNotebook", background="#2f2f2f")
 
 	# Remove blue dotted line from focused tab
 	# fmt: off
@@ -353,7 +408,7 @@ def set_theme(win: Tk) -> None:
 	style.configure("TCheckbutton", font=FONT_SMALL, foreground=COLOR_DEFAULT)
 	style.configure("TRadiobutton", font=FONT_SMALL, foreground=COLOR_DEFAULT)
 	style.configure("TLabelframe.Label", font=FONT_SMALL, foreground=COLOR_DEFAULT)
-	style.configure("Treeview", font=FONT_SMALL, foreground=COLOR_DEFAULT)
+	style.configure("Treeview", font=FONT_SMALL, foreground=COLOR_DEFAULT, rowheight=scale(25))
 	style.configure("Heading", font=FONT_SMALL, foreground=COLOR_DEFAULT)
 	style.configure("Update.TFrame", background="pale green")
 

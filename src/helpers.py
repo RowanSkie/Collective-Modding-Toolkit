@@ -81,9 +81,9 @@ class PCInfo:
 
 	@staticmethod
 	def _get_ram() -> int:
-		mem: pswin.svmem = psutil.virtual_memory()  # type: ignore[reportUnknownVariableType]
+		mem: pswin.svmem = psutil.virtual_memory()  # ty: ignore[unresolved-attribute]
 		if TYPE_CHECKING:
-			assert isinstance(mem, pswin.svmem)
+			assert isinstance(mem, pswin.svmem)  # ty: ignore[unresolved-attribute]
 		return round(mem.total / 1024**3)
 
 	@staticmethod
@@ -156,14 +156,14 @@ class CMCTabFrame(ttk.Frame, ABC):
 		self.loading_error: str | None = None
 		self.label_loading: ttk.Label | None = None
 
-	def _load(self) -> bool:  # ruff: ignore[no-self-use]
+	def _load(self) -> bool:
 		"""Load any data needed for this tab. Return False on failure."""
 		return True
 
-	def switch_from(self) -> None:  # ruff: ignore[no-self-use]
+	def switch_from(self) -> None:
 		return
 
-	def _switch_to(self) -> None:  # ruff: ignore[no-self-use]
+	def _switch_to(self) -> None:
 		return
 
 	@abstractmethod
@@ -199,17 +199,26 @@ class CMCTabFrame(ttk.Frame, ABC):
 		)
 		self.label_loading.grid()
 
-		if self._load():
-			self.label_loading.destroy()
-			self.label_loading = None
-			self._loaded = True
-			self._build_gui()
-			self._switch_to()
-		else:
-			logger.error("Load Tab : %s : Failed : %s", self.__class__.__name__, self.loading_error)
-			self.sv_loading_text.set(self.loading_error or "Failed to load tab.")
-			self.label_loading.configure(foreground=COLOR_BAD)
-		self._loading = False
+		try:
+			loaded = self._load()
+		except Exception as e:
+			logger.exception("Load Tab : %s : Exception", self.__class__.__name__)
+			self.loading_error = f"Failed to load tab.\n{e.__class__.__name__}: {e}"
+			loaded = False
+
+		try:
+			if loaded:
+				self.label_loading.destroy()
+				self.label_loading = None
+				self._loaded = True
+				self._build_gui()
+				self._switch_to()
+			else:
+				logger.error("Load Tab : %s : Failed : %s", self.__class__.__name__, self.loading_error)
+				self.sv_loading_text.set(self.loading_error or "Failed to load tab.")
+				self.label_loading.configure(foreground=COLOR_BAD)
+		finally:
+			self._loading = False
 
 	@final
 	@property

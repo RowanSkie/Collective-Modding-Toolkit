@@ -21,11 +21,11 @@ import logging
 from enum import StrEnum
 from tkinter import *
 from tkinter import ttk
-
-from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
+from typing import Any, cast
 
 from globals import *
 from helpers import CMCheckerInterface, CMCTabFrame
+from utils import add_tooltip
 
 logger = logging.getLogger(__name__)
 
@@ -85,8 +85,8 @@ class SettingsTab(CMCTabFrame):
 		}
 
 		for name, (tooltip, column, row, var, action, options) in options_radios.items():
-			frame = ttk.Labelframe(self, text=name, padding=5)
-			frame.grid(column=column, row=row, padx=5, pady=5, sticky=NSEW)
+			frame = ttk.Labelframe(self, text=name, padding=scale(5))
+			frame.grid(column=column, row=row, padx=scale(5), pady=scale(5), sticky=NSEW)
 			for text, value in options:
 				radio = ttk.Radiobutton(
 					frame,
@@ -100,8 +100,9 @@ class SettingsTab(CMCTabFrame):
 
 				radio.configure(command=update_setting)
 				radio.pack(anchor=W, side=TOP)
-				ToolTip(radio, tooltip)
+				add_tooltip(radio, tooltip)
 
 	def on_radio_change(self, setting: str, variable: Variable) -> None:
-		self.cmc.settings.dict[setting] = variable.get()
+		dynamic_settings = cast("dict[str, Any]", self.cmc.settings.dict)
+		dynamic_settings[setting] = variable.get()
 		self.cmc.settings.save()

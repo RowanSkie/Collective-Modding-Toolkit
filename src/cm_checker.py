@@ -17,6 +17,7 @@
 #
 
 
+import io
 import logging
 import sys
 import webbrowser
@@ -24,7 +25,7 @@ from tkinter import *
 from tkinter import ttk
 from typing import TYPE_CHECKING
 
-from tktooltip import ToolTip  # type: ignore[reportMissingTypeStubs]
+from PIL import Image as PILImage
 
 import tabs
 from enums import Tab
@@ -36,6 +37,7 @@ from helpers import (
 	PCInfo,
 )
 from utils import (
+	add_tooltip,
 	check_for_update_github,
 	check_for_update_nexus,
 	get_asset_path,
@@ -66,7 +68,15 @@ class CMChecker(CMCheckerInterface):
 
 	def get_image(self, relative_path: str) -> PhotoImage:
 		if relative_path not in self._images:
-			self._images[relative_path] = PhotoImage(file=get_asset_path(relative_path))
+			image_path = get_asset_path(relative_path)
+			if scale(100) == 100 or relative_path == "images/icon-32.png":
+				self._images[relative_path] = PhotoImage(file=image_path)
+			else:
+				with PILImage.open(image_path) as img:
+					size = (scale(img.width), scale(img.height))
+					buffer = io.BytesIO()
+					img.resize(size, PILImage.Resampling.LANCZOS).save(buffer, format="PNG")
+					self._images[relative_path] = PhotoImage(data=buffer.getvalue())
 
 		return self._images[relative_path]
 
@@ -83,9 +93,11 @@ class CMChecker(CMCheckerInterface):
 		self.root.wm_title(f"{APP_TITLE} v{APP_VERSION}")
 		self.root.wm_protocol("WM_DELETE_WINDOW", self.on_close)
 
-		x = (self.root.winfo_screenwidth() // 2) - (WINDOW_WIDTH // 2)
-		y = (self.root.winfo_screenheight() // 2) - (WINDOW_HEIGHT // 2)
-		self.root.wm_geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x}+{y}")
+		width = scale(WINDOW_WIDTH)
+		height = scale(WINDOW_HEIGHT)
+		x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+		y = (self.root.winfo_screenheight() // 2) - (height // 2)
+		self.root.wm_geometry(f"{width}x{height}+{x}+{y}")
 		self.root.grid_columnconfigure(0, weight=1)
 		self.root.grid_rowconfigure(1, weight=1)
 
@@ -102,7 +114,7 @@ class CMChecker(CMCheckerInterface):
 		}
 
 		notebook.bind("<<NotebookTabChanged>>", self.on_tab_changed)
-		self.root.bind("<Escape>", lambda _: self.root.destroy())
+		self.root.bind("<Escape>", lambda _: self.on_close())
 		self.root.bind("<Unmap>", self.on_minimize)
 		self.root.bind("<Map>", self.on_restore)
 
@@ -129,7 +141,7 @@ class CMChecker(CMCheckerInterface):
 			foreground="dark green",
 			anchor=E,
 			justify=RIGHT,
-			padding=5,
+			padding=scale(5),
 			font=FONT,
 		).grid(column=column, row=0, sticky=E)
 
@@ -148,7 +160,7 @@ class CMChecker(CMCheckerInterface):
 			)
 			hyperlink_label_nexus.grid(column=column, row=0, sticky=W)
 			hyperlink_label_nexus.bind("<Button-1>", lambda _: webbrowser.open(NEXUS_LINK))
-			ToolTip(hyperlink_label_nexus, "Open Nexus Mods")
+			add_tooltip(hyperlink_label_nexus, "Open Nexus Mods")
 
 		if github_version and nexus_version:
 			column += 1
@@ -176,7 +188,7 @@ class CMChecker(CMCheckerInterface):
 			)
 			hyperlink_label_github.grid(column=column, row=0, sticky=W)
 			hyperlink_label_github.bind("<Button-1>", lambda _: webbrowser.open(GITHUB_LINK))
-			ToolTip(hyperlink_label_github, "Open GitHub")
+			add_tooltip(hyperlink_label_github, "Open GitHub")
 
 		update_frame.grid_columnconfigure(0, weight=1)
 		update_frame.grid_columnconfigure(column, weight=1)
@@ -196,10 +208,12 @@ class CMChecker(CMCheckerInterface):
 		if self.root.wm_state() != "normal":
 			return
 		scanner_tab = self.tabs[Tab.Scanner]
-		if scanner_tab.is_loaded and isinstance(scanner_tab, tabs.ScannerTab):
+		if scanner_tab.is_loaded and isinstance(scanner_tab, tabs.ScannerTab) and self.current_tab is scanner_tab:
 			if scanner_tab.side_pane:
+				scanner_tab.side_pane.update_geometry()
 				scanner_tab.side_pane.wm_state("normal")
 			if scanner_tab.details_pane:
+				scanner_tab.details_pane.update_geometry()
 				scanner_tab.details_pane.wm_state("normal")
 
 	def on_tab_changed(self, event: Event[ttk.Notebook]) -> None:
@@ -211,7 +225,6 @@ class CMChecker(CMCheckerInterface):
 		self.current_tab = self.tabs[new_tab]
 
 		self.tabs[new_tab].load()
-		self.root.update()
 
 	def refresh_tab(self, tab: Tab) -> None:
 		logger.debug("Refresh Tab : %s", tab)

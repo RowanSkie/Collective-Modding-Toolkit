@@ -20,7 +20,7 @@
 from enums import InstallType
 
 APP_TITLE = "Collective Modding Toolkit"
-APP_VERSION = "0.6.2-dev"
+APP_VERSION = "0.6.3"
 
 MAX_MODULES_FULL = 254
 MAX_MODULES_LIGHT = 4096
@@ -41,7 +41,7 @@ COLOR_INDIE = "#4b92da"
 
 NEXUS_LINK = "https://www.nexusmods.com/fallout4/mods/87907"
 DISCORD_INVITE = "https://discord.gg/tktyEyYHZH"
-GITHUB_LINK = "https://github.com/RowanSkie/Collective-Modding-Toolkit"
+GITHUB_LINK = "https://github.com/wxMichael/Collective-Modding-Toolkit"
 
 PATCHER_FILTER_OG = "Showing all v1\n(Includes Base Game/DLC/CC)"
 PATCHER_FILTER_NG = "Showing all v7 & v8\n(Includes Base Game/DLC/CC)"
@@ -64,6 +64,18 @@ MODULE_VERSION_SUPPORT = {
 	"Fallout 76": {"68.0", "216.0", "223.0"},
 	"Starfield": {"0.96"},
 }
+
+_ui_scale = 1.0
+
+
+def set_ui_scale(factor: float) -> None:
+	global _ui_scale  # ruff: ignore[global-statement]
+	_ui_scale = max(factor, 1.0)
+
+
+def scale(pixels: float) -> int:
+	return round(pixels * _ui_scale)
+
 
 WINDOW_WIDTH = 760
 WINDOW_HEIGHT = 450
@@ -217,7 +229,7 @@ Because they're actually identical, you can just patch the version number in the
 
 ABOUT_DOWNGRADING_TITLE = "About Downgrading Fallout 4 & Creation Kit"
 ABOUT_DOWNGRADING = """This downgrader makes use of delta patches which are downloaded as-needed from the CMT GitHub page.
-Patches range in size from 23KB to 63MB.
+Patches range in size from 1KB to 66MB.
 
 Backups are created prior to patching, and will be used instead of patches if present.
 Simple Downgrader's backups will also be used.
@@ -313,8 +325,8 @@ TOOLTIP_SCAN_CONFLICTS = "Detect conflicting mods and mod settings."
 TOOLTIP_SCAN_SUGGEST = "Make suggestions for changes to your mod setup."
 
 TOOLTIP_UPDATE_SOURCE = """GitHub will always have the latest release.
-Nexus Mods releases may be delayed due to
-their review process or to await more testing."""
+Nexus Mods releases may be delayed to
+await more testing."""
 TOOLTIP_LOG_LEVEL = """Sets the minimum importance level for messages sent to the log file.
 DEBUG: Extra verbose.
 INFO: Default.

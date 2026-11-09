@@ -58,12 +58,23 @@ class F4SETab(CMCTabFrame):
 				self.loading_error += "\nTry launching via your mod manager."
 			return False
 
+		try:
+			game_version = self.cmc.game.load_game_version()
+		except Exception:
+			logger.exception("Failed to read Fallout4.exe version")
+			self.loading_error = "Unable to read the version of Fallout4.exe"
+			return False
+
 		self.dll_info.clear()
 		for dll_file in self.cmc.game.f4se_path.iterdir():
 			if dll_file.suffix.lower() == ".dll" and not dll_file.name.startswith("msdia"):
 				logger.debug("Scanning %s", dll_file.name)
-				self.dll_info[dll_file.name] = f4se_utils.parse_dll(dll_file, self.cmc.game.load_game_version())
 				# TODO: make this actually scan the game
+				try:
+					self.dll_info[dll_file.name] = f4se_utils.parse_dll(dll_file, game_version)
+				except OSError:
+					logger.exception("Failed to load %s", dll_file.name)
+					self.dll_info[dll_file.name] = None
 		return True
 
 	def _build_gui(self) -> None:
@@ -79,11 +90,11 @@ class F4SETab(CMCTabFrame):
 		tree_dlls.heading("ae", text="AE")
 		tree_dlls.heading("user", text="Your Game")
 
-		tree_dlls.column("#0", width=240, stretch=False, anchor=E)
-		tree_dlls.column("og", width=60, stretch=False, anchor=CENTER)
-		tree_dlls.column("ng", width=60, stretch=False, anchor=CENTER)
-		tree_dlls.column("ae", width=60, stretch=False, anchor=CENTER)
-		tree_dlls.column("user", width=80, stretch=False, anchor=CENTER)
+		tree_dlls.column("#0", width=scale(240), stretch=False, anchor=E)
+		tree_dlls.column("og", width=scale(60), stretch=False, anchor=CENTER)
+		tree_dlls.column("ng", width=scale(60), stretch=False, anchor=CENTER)
+		tree_dlls.column("ae", width=scale(60), stretch=False, anchor=CENTER)
+		tree_dlls.column("user", width=scale(80), stretch=False, anchor=CENTER)
 
 		tree_dlls.tag_configure(TAG_NEUTRAL, foreground=COLOR_NEUTRAL_1)
 		tree_dlls.tag_configure(TAG_GOOD, foreground=COLOR_GOOD)
@@ -106,7 +117,7 @@ class F4SETab(CMCTabFrame):
 			text="F4SE DLLs",
 			font=FONT,
 			anchor=N,
-		).grid(column=2, row=0, padx=5, pady=5)
+		).grid(column=2, row=0, padx=scale(5), pady=scale(5))
 
 		text_about_f4se = Text(
 			self,
@@ -132,7 +143,7 @@ class F4SETab(CMCTabFrame):
 			values: list[str] = []
 			if info is None or not info["IsF4SE"]:
 				tag = TAG_NEUTRAL
-				values = [EMOJI_DLL_UNKNOWN] * 3
+				values = [EMOJI_DLL_UNKNOWN] * len(tree_dlls["columns"])
 			else:
 				og = EMOJI_DLL_GOOD if info.get("SupportsOG") else EMOJI_DLL_BAD
 
